@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0284c7">
+  <meta name="description" content="Laboratorio Virtual Interactivo de Efecto Doppler y Cono de Mach para Física III - Movimiento Ondulatorio. Simulación 2D, gráficas en tiempo real y sintetizador acústico.">
+  <title>Laboratorio de Efecto Doppler & Cono de Mach | Física III</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Tipografía: Outfit & DM Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Iconos Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Renderizado KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <!-- Estilos del Laboratorio de Doppler -->
+  <link rel="stylesheet" href="css/laboratorio-doppler.css">
+
+  <script>
+    // Limpieza de Service Workers cruzados y cachés residuales de otros cuadernos
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs) {
+        regs.forEach(function(r) { r.unregister(); });
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then(function(keys) {
+        keys.forEach(function(k) {
+          if (k.toLowerCase().includes('mas')) caches.delete(k);
+        });
+      });
+    }
+  </script>
+</head>
+<body>
+
+  <!-- ========================================================================
+       BARRA DE NAVEGACIÓN SUPERIOR
+       ======================================================================== -->
+  <header class="lab-nav" role="banner">
+    <div class="lab-brand-group">
+      <a class="lab-brand" href="index.html#page-17" aria-label="Volver al cuaderno de Física III">
+        <span class="brand-mark"><i class="fas fa-satellite-dish"></i></span>
+        <span>Física III <small>EFECTO DOPPLER · LAB 03</small></span>
+      </a>
+      <div class="nav-meta" aria-live="polite">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span>CINEMÁTICA ONDULATORIA Y ACÚSTICA</span>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Retorno directo al Cuaderno de Física 3 MO -->
+      <a class="nav-btn" href="index.html#page-17" title="Volver a la Página 17 del Cuaderno" aria-label="Volver al Cuaderno">
+        <i class="fas fa-book-open"></i> <span>Volver al Cuaderno (Pág. 17)</span>
+      </a>
+
+      <!-- Enlace al Laboratorio de Superposición -->
+      <a class="nav-btn" href="laboratorio.html" title="Ir al Laboratorio de Superposición e Interferencia" aria-label="Laboratorio de Superposición">
+        <i class="fas fa-wave-square"></i> <span>Lab. Superposición</span>
+      </a>
+
+      <!-- Botón de Audio Realista Web Audio API -->
+      <button id="btnToggleAudio" class="nav-btn audio-btn" type="button" title="Activar / Desactivar sintetizador de sonido Doppler" aria-label="Activar Audio">
+        <i class="fas fa-volume-xmark"></i> <span>Activar Audio</span>
+      </button>
+
+      <!-- Exportación -->
+      <button id="btnExportJSON" class="nav-btn" type="button" title="Exportar parámetros en JSON" aria-label="Exportar JSON">
+        <i class="fas fa-file-export"></i> <span>Exportar</span>
+      </button>
+      <button id="btnExportPNG" class="nav-btn primary" type="button" title="Captura de alta resolución PNG" aria-label="Captura PNG">
+        <i class="fas fa-camera"></i> <span>Imagen</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       ÁREA PRINCIPAL DEL LABORATORIO
+       ======================================================================== -->
+  <main class="lab-layout" role="main">
+    
+    <!-- Encabezado de la Sección -->
+    <section class="lab-heading" aria-labelledby="pageTitle">
+      <div>
+        <p class="eyebrow">LAB 03 <span>/</span> EFECTO DOPPLER & ONDAS DE CHOQUE</p>
+        <h1 id="pageTitle">Laboratorio de <em>Efecto Doppler</em> y Cono de Mach</h1>
+        <p class="intro">
+          Simula el desplazamiento relativo entre fuente emisora y observador en 2D. Arrastra al observador, analiza la compresión direccional de longitudes de onda, escucha el tono Doppler en tiempo real y experimenta con la transición supersónica.
+        </p>
+      </div>
+
+      <div class="header-status-group">
+        <div class="status-badge" aria-label="Ecuación general">
+          <span>ECUACIÓN GENERAL DOPPLER</span>
+          <strong>\(f_o = f_s \left( \frac{c - v_o \cos\theta_o}{c - v_s \cos\theta_s} \right)\)</strong>
+        </div>
+        <div class="status-badge accent-mach" aria-label="Régimen dinámico actual">
+          <span>RÉGIMEN CINEMÁTICO</span>
+          <strong id="readRegimeBadge">SUBSÓNICO (Mach 0.09)</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- Espacio de Trabajo Principal (Split Grid) -->
+    <div id="workspaceGrid" class="workspace-grid">
+
+      <!-- COLUMNA IZQUIERDA: CONTROLES, PRESETS Y CALCULADORA -->
+      <aside class="editor-column" aria-label="Panel de configuración didáctica y parámetros">
+        
+        <!-- Tarjeta 1: Casos de Estudio Didácticos -->
+        <article class="panel-card" aria-labelledby="headingPresets">
+          <div class="card-heading" role="button" tabindex="0" aria-expanded="true">
+            <div class="card-heading-title">
+              <span class="section-index">01</span>
+              <h2 id="headingPresets">Casos de estudio didácticos</h2>
+            </div>
+            <i class="fas fa-graduation-cap" style="color:var(--muted)"></i>
+          </div>
+          <div class="card-body">
+            <div class="preset-selector-group">
+              <label for="presetSelector">Seleccionar fenómeno guiado:</label>
+              <select id="presetSelector" class="preset-select" aria-label="Seleccionar caso de estudio didáctico">
+                <!-- Opciones inyectadas por JS -->
+              </select>
+            </div>
+
+            <h3 id="didacticTitle" class="didactic-case-title"></h3>
+            <div id="didacticDescription" class="didactic-explanation" aria-live="polite"></div>
+
+            <div class="didactic-questions">
+              <span class="questions-label"><i class="fas fa-lightbulb"></i> Preguntas para predecir e indagar:</span>
+              <ol id="didacticQuestionsList" class="questions-list">
+                <!-- Preguntas inyectadas por JS -->
+              </ol>
+            </div>
+          </div>
+        </article>
+
+        <!-- Tarjeta 2: Parámetros del Experimento -->
+        <article class="panel-card" aria-labelledby="headingParams">
+          <div class="card-heading" role="button" tabindex="0" aria-expanded="true">
+            <div class="card-heading-title">
+              <span class="section-index">02</span>
+              <h2 id="headingParams">Parámetros cinemáticos y acústicos</h2>
+            </div>
+            <i class="fas fa-sliders" style="color:var(--muted)"></i>
+          </div>
+          <div class="card-body">
+            
+            <!-- Velocidad de la fuente vs -->
+            <div class="param-group">
+              <div class="param-header">
+                <span class="param-label"><i class="fas fa-car-side" style="color:#ef4444;"></i> Velocidad de la fuente \(v_s\):</span>
+                <div class="param-value-box">
+                  <input type="number" id="numVs" class="param-num-input" value="35" step="1">
+                  <span class="param-unit">m/s</span>
+                </div>
+              </div>
+              <input type="range" id="sliderVs" class="param-slider" min="-600" max="600" step="2" value="35" aria-label="Velocidad de la fuente">
+              <div class="quick-btn-row">
+                <button type="button" class="mini-pill-btn" id="btnVsZero">Reposo (0 m/s)</button>
+                <button type="button" class="mini-pill-btn" id="btnVsDir">Invertir marcha</button>
+              </div>
+            </div>
+
+            <!-- Velocidad del observador vo -->
+            <div class="param-group">
+              <div class="param-header">
+                <span class="param-label"><i class="fas fa-person-walking" style="color:#10b981;"></i> Velocidad del observador \(v_o\):</span>
+                <div class="param-value-box">
+                  <input type="number" id="numVo" class="param-num-input" value="0" step="1">
+                  <span class="param-unit">m/s</span>
+                </div>
+              </div>
+              <input type="range" id="sliderVo" class="param-slider" min="-120" max="120" step="1" value="0" aria-label="Velocidad del observador">
+              <div class="quick-btn-row">
+                <button type="button" class="mini-pill-btn" id="btnVoZero">Observador fijo (0 m/s)</button>
+              </div>
+            </div>
+
+            <!-- Frecuencia emitida fs -->
+            <div class="param-group">
+              <div class="param-header">
+                <span class="param-label"><i class="fas fa-bell" style="color:var(--blue);"></i> Frecuencia propia de emisión \(f_s\):</span>
+                <div class="param-value-box">
+                  <input type="number" id="numFs" class="param-num-input" value="600" step="10">
+                  <span class="param-unit">Hz</span>
+                </div>
+              </div>
+              <input type="range" id="sliderFs" class="param-slider" min="100" max="1200" step="10" value="600" aria-label="Frecuencia emitida">
+            </div>
+
+            <!-- Velocidad del sonido en el medio c -->
+            <div class="param-group">
+              <div class="param-header">
+                <span class="param-label"><i class="fas fa-wind" style="color:var(--cyan);"></i> Velocidad de propagación \(c\):</span>
+                <div class="param-value-box">
+                  <input type="number" id="numC" class="param-num-input" value="343" step="5">
+                  <span class="param-unit">m/s</span>
+                </div>
+              </div>
+              <input type="range" id="sliderC" class="param-slider" min="150" max="1600" step="5" value="343" aria-label="Velocidad del sonido">
+              <div class="quick-btn-row">
+                <button type="button" class="mini-pill-btn" data-set-c="343">Aire (343 m/s)</button>
+                <button type="button" class="mini-pill-btn" data-set-c="965">Helio (965 m/s)</button>
+                <button type="button" class="mini-pill-btn" data-set-c="1480">Agua (1480 m/s)</button>
+              </div>
+            </div>
+
+            <!-- Separación perpendicular d -->
+            <div class="param-group">
+              <div class="param-header">
+                <span class="param-label"><i class="fas fa-arrows-alt-v" style="color:var(--purple);"></i> Distancia de paso perpendicular \(d\):</span>
+                <div class="param-value-box">
+                  <input type="number" id="numD" class="param-num-input" value="25" step="1">
+                  <span class="param-unit">m</span>
+                </div>
+              </div>
+              <input type="range" id="sliderD" class="param-slider" min="0" max="80" step="1" value="25" aria-label="Distancia perpendicular">
+            </div>
+
+          </div>
+        </article>
+
+        <!-- Tarjeta 3: Deducción Analítica y Calculadora Acústica -->
+        <article class="panel-card" aria-labelledby="headingCalc">
+          <div class="card-heading" role="button" tabindex="0" aria-expanded="true">
+            <div class="card-heading-title">
+              <span class="section-index">03</span>
+              <h2 id="headingCalc">Calculadora analítica y lecturas en vivo</h2>
+            </div>
+            <i class="fas fa-calculator" style="color:var(--muted)"></i>
+          </div>
+          <div class="card-body">
+            
+            <div class="calc-readout-grid">
+              <div class="calc-tile highlight">
+                <span class="calc-tile-label">Frecuencia observada</span>
+                <span id="readFo" class="calc-tile-val">668.5 Hz</span>
+              </div>
+              <div class="calc-tile">
+                <span class="calc-tile-label">Corrimiento Doppler (Δf)</span>
+                <span id="readDeltaF" class="calc-tile-val">+68.5 Hz (+11.4%)</span>
+              </div>
+              <div class="calc-tile">
+                <span class="calc-tile-label">Número de Mach (vs / c)</span>
+                <span id="readMach" class="calc-tile-val">M 0.10</span>
+              </div>
+              <div class="calc-tile">
+                <span class="calc-tile-label">Ángulo visual actual (θ)</span>
+                <span id="readTheta" class="calc-tile-val">28.4°</span>
+              </div>
+              <div class="calc-tile">
+                <span class="calc-tile-label">λ comprimida al frente</span>
+                <span id="readLambdaFront" class="calc-tile-val">0.513 m</span>
+              </div>
+              <div class="calc-tile">
+                <span class="calc-tile-label">λ dilatada atrás</span>
+                <span id="readLambdaBack" class="calc-tile-val">0.630 m</span>
+              </div>
+            </div>
+
+            <!-- Desglose Matemático KaTeX -->
+            <div id="calcMathBox" class="calc-math-box" aria-live="polite">
+              <!-- Renderizado automático de fórmulas KaTeX -->
+            </div>
+
+          </div>
+        </article>
+
+      </aside>
+
+      <!-- DIVISOR AJUSTABLE -->
+      <div id="splitHandle" class="split-handle" role="separator" aria-orientation="vertical" tabindex="0" title="Arrastra para ajustar paneles"></div>
+
+      <!-- COLUMNA DERECHA: LIENZOS GRÁFICOS Y ANÁLISIS EN VIVO -->
+      <section class="graph-column" aria-label="Visualización gráfica interactiva">
+        
+        <!-- Panel 1: Lienzo GeoGebra 2D de Frentes de Onda -->
+        <article class="plot-container-card">
+          <div class="plot-card-header">
+            <div class="plot-legend">
+              <span class="legend-item"><span class="legend-dot source"></span> <b>Fuente emisora</b></span>
+              <span class="legend-item"><span class="legend-dot observer"></span> <b>Observador (Arrastrable)</b></span>
+              <span class="legend-item"><span class="legend-dot wavefront"></span> Frentes de onda</span>
+              <span class="legend-item"><span class="legend-dot mach-cone"></span> Envolvente Cono de Mach</span>
+            </div>
+
+            <div class="plot-card-actions">
+              <button id="toolTheme" class="icon-btn" type="button" title="Alternar tema oscuro / claro" aria-label="Cambiar tema">
+                <i class="fas fa-moon"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Lienzo 2D -->
+          <div class="canvas-wrapper">
+            <!-- Barra de herramientas flotante -->
+            <div class="canvas-toolbar" role="toolbar" aria-label="Herramientas del plano">
+              <button id="toolZoomIn" class="toolbar-btn" type="button" title="Acercar (+)" aria-label="Acercar zoom"><i class="fas fa-plus"></i></button>
+              <button id="toolZoomOut" class="toolbar-btn" type="button" title="Alejar (-)" aria-label="Alejar zoom"><i class="fas fa-minus"></i></button>
+              <button id="toolReset" class="toolbar-btn" type="button" title="Centrar plano (0)" aria-label="Centrar plano"><i class="fas fa-expand-arrows-alt"></i></button>
+            </div>
+
+            <div class="canvas-info-badge">
+              <span>Arrastra al <b>Observador</b> para moverlo en 2D</span>
+              <span>·</span>
+              <span>Rueda del ratón para <b>Zoom</b></span>
+            </div>
+
+            <canvas id="waveCanvas" class="wave-canvas" aria-label="Lienzo 2D de simulación de frentes de onda y cono de Mach"></canvas>
+            <div id="geoTooltip" class="plot-tooltip" aria-hidden="true"></div>
+          </div>
+
+          <!-- Barra de controles de reproducción y tiempo -->
+          <div class="transport-footer" role="region" aria-label="Controles de reproducción">
+            <div class="transport-controls">
+              <button id="playToggle" class="icon-btn primary" type="button" title="Pausar / Reanudar (Espacio)" aria-label="Reproducir / Pausar">
+                <i class="fas fa-pause"></i>
+              </button>
+              <button id="stepBack" class="icon-btn" type="button" title="Paso atrás (-0.05 s) (Flecha izquierda)" aria-label="Paso atrás">
+                <i class="fas fa-backward-step"></i>
+              </button>
+              <button id="stepForward" class="icon-btn" type="button" title="Paso adelante (+0.05 s) (Flecha derecha)" aria-label="Paso adelante">
+                <i class="fas fa-forward-step"></i>
+              </button>
+              <button id="resetTime" class="icon-btn" type="button" title="Reiniciar tiempo (R)" aria-label="Reiniciar tiempo">
+                <i class="fas fa-rotate-left"></i>
+              </button>
+            </div>
+
+            <div class="time-scrubber-group">
+              <span class="time-readout">t: <output id="currentTime">0.00 s</output></span>
+              <input id="timeSlider" class="time-scrubber" type="range" min="0" max="10" step="0.02" value="0.00" aria-label="Línea de tiempo">
+            </div>
+
+            <div class="transport-controls">
+              <label for="speedSelect" style="font:600 11px var(--font-mono); color:var(--muted)">Velocidad:</label>
+              <select id="speedSelect" class="speed-select" aria-label="Velocidad de reproducción">
+                <option value="0.25">0.25×</option>
+                <option value="0.5">0.5×</option>
+                <option value="1" selected>1.0×</option>
+                <option value="2">2.0×</option>
+              </select>
+            </div>
+          </div>
+        </article>
+
+        <!-- Panel 2: Pestañas de Gráficas de Frecuencia y Espectro -->
+        <article class="secondary-plots-card">
+          <div class="tabs-header">
+            <div class="tabs-list" role="tablist" aria-label="Gráficas secundarias de análisis">
+              <button class="tab-btn active" data-tab="time-curve" role="tab" aria-selected="true">
+                <i class="fas fa-chart-line"></i> Curva de Frecuencia \(f_o(t)\)
+              </button>
+              <button class="tab-btn" data-tab="polar-wave" role="tab" aria-selected="false">
+                <i class="fas fa-compass"></i> Diagrama Polar \(\lambda(\theta)\)
+              </button>
+              <button class="tab-btn" data-tab="spectrum" role="tab" aria-selected="false">
+                <i class="fas fa-chart-column"></i> Espectro Acústico \((\Delta f)\)
+              </button>
+            </div>
+            <span style="font:500 11px var(--font-mono); color:var(--muted)">Sincronizado en tiempo real</span>
+          </div>
+
+          <div class="tab-panel active">
+            <div class="secondary-canvas-wrapper">
+              <canvas id="secondaryCanvas" class="secondary-canvas" aria-label="Gráfica de análisis acústico en función del tiempo"></canvas>
+            </div>
+            <div class="graph-notes">
+              <span>Curva continua de frecuencia percibida según la posición instantánea de la fuente</span>
+              <span>Línea discontinua: \(f_s\) de emisión</span>
+            </div>
+          </div>
+        </article>
+
+      </section>
+
+    </div>
+
+    <!-- Pie de página -->
+    <footer class="lab-footer">
+      <div class="footer-credit">
+        <strong>Física III — Movimiento Ondulatorio</strong> · Universidad Tecnológica de Pereira (UTP)
+      </div>
+      <div class="footer-formula">
+        \(\sin\mu = \frac{c}{v_s} = \frac{1}{M} \quad \iff \quad f_o = f_s \left( \frac{c \pm v_o}{c \mp v_s} \right)\)
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Librerías KaTeX -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Script del Laboratorio de Doppler -->
+  <script src="js/laboratorio-doppler.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "Física III - Laboratorio de Movimiento Ondulatorio",
+  "short_name": "Física3 MO",
+  "description": "Laboratorio Interactivo Virtual de Superposición e Interferencia de Ondas",
+  "start_url": "./laboratorio.html",
+  "display": "standalone",
+  "background_color": "#070b14",
+  "theme_color": "#168b68",
+  "icons": [
+    {
+      "src": "imagenes/portada.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

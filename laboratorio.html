@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#168b68">
+  <meta name="description" content="Laboratorio interactivo de Movimiento Ondulatorio, Superposición e Interferencia de Ondas estilo GeoGebra para Física III.">
+  <title>Laboratorio Movimiento Ondulatorio | Física III</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Google Fonts: DM Mono & Outfit (Identidad visual unificada con Física III) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- KaTeX para visualización de ecuaciones matemáticas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <!-- Estilos Maestros del Laboratorio -->
+  <link rel="stylesheet" href="css/laboratorio.css">
+
+  <script>
+    // Desregistrar Service Workers cruzados y limpiar caché residual de MAS
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs) {
+        regs.forEach(function(r) { r.unregister(); });
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then(function(keys) {
+        keys.forEach(function(k) {
+          if (k.toLowerCase().includes('mas')) caches.delete(k);
+        });
+      });
+    }
+  </script>
+</head>
+<body>
+
+  <!-- ========================================================================
+       BARRA DE NAVEGACIÓN SUPERIOR
+       ======================================================================== -->
+  <header class="lab-nav" role="banner">
+    <a class="lab-brand" href="index.html" aria-label="Física III - Volver al Cuaderno de Movimiento Ondulatorio">
+      <span class="brand-mark"><i class="fas fa-water"></i></span>
+      <span>Física III <small>MOVIMIENTO ONDULATORIO</small></span>
+    </a>
+
+    <div class="nav-meta" aria-live="polite">
+      <span class="live-dot" aria-hidden="true"></span>
+      <span>MODELO LINEAL · SUPERPOSICIÓN DE ONDAS</span>
+    </div>
+
+    <div class="nav-actions">
+      <a class="nav-btn" href="index.html" title="Volver al Cuaderno principal" aria-label="Volver al Cuaderno">
+        <i class="fas fa-book-open"></i> <span>Cuaderno</span>
+      </a>
+      <a class="nav-btn" href="laboratorio-doppler.html" title="Abrir Laboratorio de Efecto Doppler y Cono de Mach" aria-label="Abrir Laboratorio Doppler">
+        <i class="fas fa-satellite-dish"></i> <span>Lab. Doppler</span>
+      </a>
+      <input type="file" id="importFileInput" accept=".json" style="display:none;" aria-label="Archivo de configuración para importar">
+      <button id="btnImportJSON" class="nav-btn" type="button" title="Importar configuración JSON" aria-label="Importar configuración JSON">
+        <i class="fas fa-file-import"></i> <span>Importar</span>
+      </button>
+      <button id="btnExportJSON" class="nav-btn" type="button" title="Exportar configuración JSON" aria-label="Exportar configuración JSON">
+        <i class="fas fa-file-export"></i> <span>Exportar</span>
+      </button>
+      <button id="btnExportPNG" class="nav-btn primary" type="button" title="Descargar gráfico en alta resolución PNG" aria-label="Descargar gráfico en imagen">
+        <i class="fas fa-camera"></i> <span>Imagen</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       ÁREA PRINCIPAL DEL LABORATORIO
+       ======================================================================== -->
+  <main class="lab-layout" role="main">
+    <section class="lab-heading" aria-labelledby="pageTitle">
+      <div>
+        <p class="eyebrow">LAB 02 <span>/</span> PROPAGACIÓN E INTERFERENCIA</p>
+        <h1 id="pageTitle">Superposición e <em>interferencia</em> de ondas</h1>
+        <p class="intro">Simula pulsos y ondas viajeras en 1D, analiza su velocidad de propagación física y experimenta con la resultante del principio de superposición lineal.</p>
+      </div>
+
+      <div class="header-status">
+        <div class="status-badge" aria-label="Ecuación de onda resultante">
+          <span>PRINCIPIO DE SUPERPOSICIÓN</span>
+          <strong>\(y(x, t) = \sum y_i(x, t)\)</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- ESPACIO DE TRABAJO CON PANEL AJUSTABLE (SPLITTER) -->
+    <div id="workspaceGrid" class="workspace-grid">
+
+      <!-- COLUMNA IZQUIERDA: CONTROLES, PRESETS Y COMPONENTES -->
+      <aside class="editor-column" aria-label="Panel de configuración y didáctica">
+        
+        <!-- Tarjeta 1: Ejemplos Didácticos Listos para Cargar -->
+        <article class="panel-card collapsible" aria-labelledby="headingPresets">
+          <div class="card-heading" role="button" tabindex="0" aria-expanded="true" title="Clic para plegar / desplegar panel">
+            <div class="card-heading-title">
+              <span class="section-index">01</span>
+              <h2 id="headingPresets">Casos de estudio didácticos</h2>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <i class="fas fa-graduation-cap" style="color:var(--muted)"></i>
+              <i class="fas fa-chevron-down collapse-indicator"></i>
+            </div>
+          </div>
+          <div class="card-body scrollable-card-body presets-scroll-body">
+            <div class="preset-selector-group">
+              <label for="presetSelector">Selecciona un fenómeno físico guiado:</label>
+              <select id="presetSelector" class="preset-select" aria-label="Seleccionar caso de estudio didáctico">
+                <!-- Opciones cargadas dinámicamente -->
+              </select>
+            </div>
+
+            <h3 id="didacticTitle" class="didactic-case-title" style="margin:12px 0 4px; font-size:13px; font-weight:700; color:var(--ink);"></h3>
+            <div id="didacticDescription" class="didactic-explanation" aria-live="polite">
+              <!-- Descripción pedagógica -->
+            </div>
+
+            <div class="didactic-questions">
+              <span class="questions-label"><i class="fas fa-lightbulb"></i> Preguntas orientadoras para predecir:</span>
+              <ol id="didacticQuestionsList" class="questions-list">
+                <!-- Preguntas cargadas dinámicamente -->
+              </ol>
+            </div>
+          </div>
+        </article>
+
+        <!-- Tarjeta 2: Editor de Componentes de Onda -->
+        <article class="panel-card collapsible" aria-labelledby="headingComponents">
+          <div class="card-heading" role="button" tabindex="0" aria-expanded="true" title="Clic para plegar / desplegar panel">
+            <div class="card-heading-title">
+              <span class="section-index">02</span>
+              <h2 id="headingComponents">Componentes de onda</h2>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button id="addComponentBtn" class="nav-btn primary mini" type="button" title="Añadir una nueva componente" aria-label="Añadir componente">
+                <i class="fas fa-plus"></i> <span>Añadir</span>
+              </button>
+              <i class="fas fa-chevron-down collapse-indicator"></i>
+            </div>
+          </div>
+          <div class="card-body scrollable-card-body components-scroll-body">
+            <p class="intro" style="margin-bottom:12px; font-size:11.5px;">
+              <i class="fas fa-info-circle" style="color:var(--blue)"></i>
+              <b>Diferencia clave:</b> El ojo <i class="fas fa-eye"></i> oculta la curva del gráfico; el botón <i class="fas fa-calculator"></i> <b>Σ</b> la incluye o excluye de la suma resultante.
+            </p>
+
+            <div id="componentsContainer" class="components-list">
+              <!-- Tarjetas de componentes inyectadas por JavaScript -->
+            </div>
+          </div>
+        </article>
+      </aside>
+
+      <!-- DIVISOR RESIZABLE (SPLIT HANDLE) -->
+      <div id="splitHandle" class="split-handle" role="separator" aria-orientation="vertical" tabindex="0" title="Arrastra para ajustar el ancho de los paneles" aria-label="Divisor de paneles ajustable"></div>
+
+      <!-- COLUMNA DERECHA: LIENZO CARTESIANO GEOGEBRA Y HERRAMIENTAS -->
+      <section class="graph-column" aria-label="Visualización gráfica interactiva">
+        
+        <article class="plot-container-card">
+          <!-- Cabecera del Lienzo -->
+          <div class="plot-card-header">
+            <div class="plot-legend" aria-label="Leyenda de curvas">
+              <span class="legend-item"><span class="legend-dot resultant"></span> <b>Resultante \(\sum y_i\)</b></span>
+              <span class="legend-item"><i class="fas fa-arrow-right" style="color:var(--ink)"></i> Vector \(\vec{v}\) propagación</span>
+            </div>
+
+            <div class="plot-card-actions">
+              <button id="toolPalette" class="icon-btn" type="button" title="Configurar paleta de estilos y temas" aria-label="Abrir paleta de estilos">
+                <i class="fas fa-palette"></i>
+              </button>
+              <button id="openModalBtn" class="icon-btn" type="button" title="Abrir gráfico en ventana modal ampliada" aria-label="Abrir gráfico en ventana ampliada">
+                <i class="fas fa-up-right-and-down-left-from-center"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Lienzo Gráfico Estilo GeoGebra -->
+          <div class="canvas-wrapper">
+            <!-- Barra de Herramientas Flotante -->
+            <div class="canvas-toolbar" role="toolbar" aria-label="Herramientas del plano cartesiano">
+              <button id="toolZoomIn" class="toolbar-btn" type="button" title="Acercar (+)" aria-label="Acercar zoom"><i class="fas fa-plus"></i></button>
+              <button id="toolZoomOut" class="toolbar-btn" type="button" title="Alejar (-)" aria-label="Alejar zoom"><i class="fas fa-minus"></i></button>
+              <button id="toolReset" class="toolbar-btn" type="button" title="Restablecer vista centrada (0)" aria-label="Restablecer vista"><i class="fas fa-expand-arrows-alt"></i></button>
+              <span class="toolbar-sep" aria-hidden="true"></span>
+              <button id="toolPan" class="toolbar-btn active" type="button" title="Modo Desplazar lienzo" aria-label="Herramienta de arrastre"><i class="fas fa-hand"></i></button>
+              <button id="toolInspect" class="toolbar-btn" type="button" title="Modo Inspector de coordenadas (I)" aria-label="Herramienta inspector de coordenadas"><i class="fas fa-crosshairs"></i></button>
+            </div>
+
+            <!-- Popover flotante de estilos -->
+            <div id="palettePopover" class="palette-popover" role="dialog" aria-label="Paleta de estilos gráficos">
+              <div class="popover-header">
+                <strong>Personalización gráfica</strong>
+                <button id="closePalette" class="icon-btn mini" type="button" aria-label="Cerrar paleta"><i class="fas fa-xmark"></i></button>
+              </div>
+
+              <!-- Temas Claro / Oscuro -->
+              <div class="theme-button-group" role="group" aria-label="Temas del gráfico">
+                <button type="button" class="theme-btn active" data-theme="light">Claro</button>
+                <button type="button" class="theme-btn" data-theme="dark">Oscuro</button>
+                <button type="button" class="theme-btn" data-theme="blueprint">Blueprint</button>
+              </div>
+
+              <div class="style-section-title">Lienzo y Ejes</div>
+              <div class="style-grid-row">
+                <span>Fondo del gráfico:</span>
+                <input id="planeBgColor" type="color" value="#f9fbf9" aria-label="Color de fondo del gráfico">
+              </div>
+              <div class="style-grid-row">
+                <span>Color de ejes:</span>
+                <input id="axisColor" type="color" value="#172d33" aria-label="Color de los ejes cartesianos">
+              </div>
+              <div class="style-grid-row">
+                <span>Grosor de ejes:</span>
+                <input id="axisWidth" type="range" min="1" max="4" step="0.5" value="1.6" aria-label="Grosor de los ejes">
+              </div>
+              <div class="style-grid-row">
+                <span>Color de cuadrícula:</span>
+                <input id="gridColor" type="color" value="#94a3b8" aria-label="Color de la cuadrícula">
+              </div>
+              <div class="style-grid-row">
+                <span>Tamaño números / etiquetas:</span>
+                <select id="fontSizeSelect" aria-label="Tamaño de números y etiquetas">
+                  <option value="9">Pequeño (9px)</option>
+                  <option value="11" selected>Normal (11px)</option>
+                  <option value="13">Grande (13px)</option>
+                </select>
+              </div>
+
+              <div class="style-section-title">Onda Resultante (Suma)</div>
+              <div class="style-grid-row">
+                <span>Mostrar resultante:</span>
+                <input id="showResultantToggle" type="checkbox" checked aria-label="Mostrar resultante">
+              </div>
+              <div class="style-grid-row">
+                <span>Color resultante:</span>
+                <input id="resultantColor" type="color" value="#d45743" aria-label="Color de la curva resultante">
+              </div>
+              <div class="style-grid-row">
+                <span>Grosor de trazo:</span>
+                <input id="resultantWidth" type="range" min="1.5" max="6" step="0.5" value="3.5" aria-label="Grosor de la curva resultante">
+              </div>
+              <div class="style-grid-row">
+                <span>Patrón de línea:</span>
+                <select id="resultantDash" aria-label="Patrón de línea de la resultante">
+                  <option value="solid" selected>Sólida</option>
+                  <option value="dashed">Guiones</option>
+                  <option value="dotted">Puntos</option>
+                </select>
+              </div>
+
+              <div class="style-section-title">Indicadores de Propagación</div>
+              <div class="style-grid-row">
+                <span>Vectores de velocidad \(\vec{v}\):</span>
+                <input id="showVectorsToggle" type="checkbox" checked aria-label="Mostrar vectores de propagación">
+              </div>
+              <div class="style-grid-row">
+                <span>Mostrar etiquetas de velocidad:</span>
+                <input id="vectorLabelsToggle" type="checkbox" checked aria-label="Mostrar etiquetas de magnitud de velocidad">
+              </div>
+            </div>
+
+            <!-- Tooltip del cursor -->
+            <div id="geoTooltip" class="plot-tooltip" aria-hidden="true"></div>
+
+            <!-- Lienzo Canvas Principal -->
+            <canvas id="waveCanvas" class="wave-canvas" aria-label="Gráfica interactiva de movimiento ondulatorio y superposición de ondas en función de la posición x"></canvas>
+          </div>
+
+          <!-- Pie de Controles de Reproducción y Transporte -->
+          <div class="transport-footer" role="region" aria-label="Controles de tiempo y reproducción">
+            <div class="transport-controls">
+              <button id="playToggle" class="icon-btn primary" type="button" title="Pausar simulación (Espacio)" aria-label="Pausar simulación">
+                <i class="fas fa-pause"></i>
+              </button>
+              <button id="stepBack" class="icon-btn" type="button" title="Paso atrás (-0.05 s) (Flecha izquierda)" aria-label="Paso atrás">
+                <i class="fas fa-backward-step"></i>
+              </button>
+              <button id="stepForward" class="icon-btn" type="button" title="Paso adelante (+0.05 s) (Flecha derecha)" aria-label="Paso adelante">
+                <i class="fas fa-forward-step"></i>
+              </button>
+              <button id="resetTime" class="icon-btn" type="button" title="Reiniciar tiempo a 0 s (R)" aria-label="Reiniciar tiempo">
+                <i class="fas fa-rotate-left"></i>
+              </button>
+            </div>
+
+            <div class="time-scrubber-group">
+              <span class="time-readout">t: <output id="currentTime">0.00 s</output></span>
+              <input id="timeSlider" class="time-scrubber" type="range" min="0" max="15" step="0.02" value="0.00" aria-label="Línea de tiempo de la simulación">
+            </div>
+
+            <div class="transport-controls">
+              <label for="speedSelect" style="font:500 11px var(--font-mono); color:var(--muted)">Velocidad:</label>
+              <select id="speedSelect" class="speed-select" aria-label="Velocidad de reproducción">
+                <option value="0.25">0.25×</option>
+                <option value="0.5">0.5×</option>
+                <option value="1" selected>1.0×</option>
+                <option value="2">2.0×</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Indicaciones de interacción -->
+          <div class="graph-status-bar">
+            <span><i class="fas fa-arrows-up-down-left-right"></i> Arrastra el plano para desplazar · Rueda para zoom · Arrastra sobre los ejes para cambiar su escala</span>
+            <span>x [m] <b>×</b> y [m]</span>
+          </div>
+        </article>
+
+        <!-- Tarjeta Inspector de Coordenadas Fijo -->
+        <article id="inspectorBox" class="inspector-card" aria-label="Detalle del inspector de coordenadas">
+          <div class="card-heading">
+            <div class="card-heading-title">
+              <span class="section-index"><i class="fas fa-crosshairs"></i></span>
+              <h2>Inspector punto a punto</h2>
+            </div>
+            <span style="font:500 10px var(--font-mono); color:var(--muted)">Mueve el cursor en el gráfico para muestrear</span>
+          </div>
+          <div class="inspector-body">
+            <div class="inspect-coords">
+              <div class="coord-row"><span>Posición x:</span> <strong id="inspectCoordX">+0.00 m</strong></div>
+              <div class="coord-row"><span>Tiempo t:</span> <strong id="inspectCoordT">0.00 s</strong></div>
+              <div class="coord-row resultant"><span>Resultante \(\sum y_i\):</span> <strong id="inspectResultantVal">+0.000 m</strong></div>
+            </div>
+            <div id="inspectComponentsList" class="inspect-components">
+              <!-- Desglose inyectado dinámicamente -->
+            </div>
+          </div>
+        </article>
+
+      </section>
+    </div>
+
+    <!-- Pie de página -->
+    <footer class="lab-footer">
+      <div class="footer-credit">
+        <span>FÍSICA III <i>/</i> MOVIMIENTO ONDULATORIO</span>
+      </div>
+      <div class="footer-formula">
+        \(\frac{\partial^2 y}{\partial t^2} = v^2 \frac{\partial^2 y}{\partial x^2} \quad \implies \quad y(x, t) = \sum_{i} y_i(x \mp v_i t)\)
+      </div>
+    </footer>
+  </main>
+
+  <!-- ========================================================================
+       TECLADO VIRTUAL MATEMÁTICO MODAL
+       ======================================================================== -->
+  <div id="virtualKeyboardModal" class="virtual-keyboard-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="vkTitle">
+    <div class="vk-content">
+      <div class="vk-header">
+        <h3 id="vkTitle"><i class="fas fa-calculator" style="color:var(--green)"></i> Teclado matemático interactivo</h3>
+        <button id="closeVirtualKeyboard" class="icon-btn mini" type="button" aria-label="Cerrar teclado virtual"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="vk-preview-box">
+        <div id="vkFormulaPreview" class="vk-formula-preview"></div>
+        <div id="vkStatusMsg" class="vk-status-msg"></div>
+      </div>
+      <div class="vk-grid" role="group" aria-label="Teclas matemáticas">
+        <!-- Fila 1 -->
+        <button type="button" class="vk-btn fn" data-insert="sin(">sin</button>
+        <button type="button" class="vk-btn fn" data-insert="cos(">cos</button>
+        <button type="button" class="vk-btn fn" data-insert="tan(">tan</button>
+        <button type="button" class="vk-btn fn" data-insert="exp(">exp</button>
+        <button type="button" class="vk-btn fn" data-insert="sqrt(">√</button>
+        <button type="button" class="vk-btn op" data-insert="^">^</button>
+
+        <!-- Fila 2 -->
+        <button type="button" class="vk-btn fn" data-insert="sinc(">sinc</button>
+        <button type="button" class="vk-btn fn" data-insert="sech(">sech</button>
+        <button type="button" class="vk-btn fn" data-insert="rect(">rect</button>
+        <button type="button" class="vk-btn fn" data-insert="tri(">tri</button>
+        <button type="button" class="vk-btn fn" data-insert="abs(">|x|</button>
+        <button type="button" class="vk-btn op" data-insert="/">/</button>
+
+        <!-- Fila 3 -->
+        <button type="button" class="vk-btn" data-insert="7">7</button>
+        <button type="button" class="vk-btn" data-insert="8">8</button>
+        <button type="button" class="vk-btn" data-insert="9">9</button>
+        <button type="button" class="vk-btn op" data-insert="*">×</button>
+        <button type="button" class="vk-btn op" data-insert="(">(</button>
+        <button type="button" class="vk-btn op" data-insert=")">)</button>
+
+        <!-- Fila 4 -->
+        <button type="button" class="vk-btn" data-insert="4">4</button>
+        <button type="button" class="vk-btn" data-insert="5">5</button>
+        <button type="button" class="vk-btn" data-insert="6">6</button>
+        <button type="button" class="vk-btn op" data-insert="-">−</button>
+        <button type="button" class="vk-btn fn" data-insert="x">x</button>
+        <button type="button" class="vk-btn fn" data-insert="t">t</button>
+
+        <!-- Fila 5 -->
+        <button type="button" class="vk-btn" data-insert="1">1</button>
+        <button type="button" class="vk-btn" data-insert="2">2</button>
+        <button type="button" class="vk-btn" data-insert="3">3</button>
+        <button type="button" class="vk-btn op" data-insert="+">+</button>
+        <button type="button" class="vk-btn fn" data-insert="pi">π</button>
+        <button type="button" class="vk-btn fn" data-insert="e">e</button>
+
+        <!-- Fila 6 -->
+        <button type="button" class="vk-btn" data-insert="0">0</button>
+        <button type="button" class="vk-btn" data-insert=".">.</button>
+        <button type="button" class="vk-btn action" data-action="backspace" title="Borrar un carácter"><i class="fas fa-delete-left"></i></button>
+        <button type="button" class="vk-btn action" data-action="clear" title="Limpiar todo">C</button>
+        <button type="button" class="vk-btn apply" data-action="apply">Insertar y Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       VENTANA MODAL AMPLIADA (EXPANDED MODAL WINDOW)
+       ======================================================================== -->
+  <div id="expandedModal" class="expanded-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalWinTitle">
+    <div class="modal-window">
+      <!-- Barra superior de la ventana modal -->
+      <div class="modal-header">
+        <div class="modal-header-title">
+          <span class="brand-mark mini" style="width:26px; height:26px; font-size:12px;"><i class="fas fa-water"></i></span>
+          <h2 id="modalWinTitle">Simulación de Ondas en Pantalla Ampliada</h2>
+        </div>
+
+        <div class="modal-window-actions" role="toolbar" aria-label="Acciones de la ventana modal">
+          <button id="minimizeModalBtn" class="window-ctrl-btn" type="button" title="Minimizar ventana a barra flotante" aria-label="Minimizar ventana">
+            <i class="fas fa-minus"></i>
+          </button>
+          <button id="maximizeModalBtn" class="window-ctrl-btn" type="button" title="Maximizar / Restaurar tamaño" aria-label="Maximizar ventana">
+            <i class="fas fa-expand"></i>
+          </button>
+          <button id="fullscreenModalBtn" class="window-ctrl-btn" type="button" title="Pantalla completa del navegador" aria-label="Pantalla completa">
+            <i class="fas fa-up-right-and-down-left-from-center"></i>
+          </button>
+          <button id="closeModalBtn" class="window-ctrl-btn close" type="button" title="Cerrar ventana ampliada (Escape)" aria-label="Cerrar ventana">
+            <i class="fas fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Lienzo de la ventana modal -->
+      <div class="modal-canvas-wrapper">
+        <div class="canvas-toolbar" role="toolbar" aria-label="Herramientas del modal">
+          <button id="modal_toolZoomIn" class="toolbar-btn" type="button" title="Acercar (+)" aria-label="Acercar zoom"><i class="fas fa-plus"></i></button>
+          <button id="modal_toolZoomOut" class="toolbar-btn" type="button" title="Alejar (-)" aria-label="Alejar zoom"><i class="fas fa-minus"></i></button>
+          <button id="modal_toolReset" class="toolbar-btn" type="button" title="Restablecer vista (0)" aria-label="Restablecer vista"><i class="fas fa-expand-arrows-alt"></i></button>
+          <span class="toolbar-sep" aria-hidden="true"></span>
+          <button id="modal_toolPan" class="toolbar-btn active" type="button" title="Arrastrar plano" aria-label="Arrastrar plano"><i class="fas fa-hand"></i></button>
+          <button id="modal_toolInspect" class="toolbar-btn" type="button" title="Inspector (I)" aria-label="Inspector de coordenadas"><i class="fas fa-crosshairs"></i></button>
+        </div>
+
+        <canvas id="modalWaveCanvas" class="wave-canvas" aria-label="Gráfica de ondas en ventana ampliada"></canvas>
+      </div>
+
+      <!-- Pie de transporte sincronizado dentro del modal -->
+      <div class="transport-footer" role="region" aria-label="Controles de transporte en ventana modal">
+        <div class="transport-controls">
+          <button id="modalPlayToggle" class="icon-btn primary" type="button" title="Pausar simulación (Espacio)" aria-label="Pausar simulación">
+            <i class="fas fa-pause"></i>
+          </button>
+          <button id="modalResetTime" class="icon-btn" type="button" title="Reiniciar tiempo (R)" aria-label="Reiniciar tiempo">
+            <i class="fas fa-rotate-left"></i>
+          </button>
+        </div>
+
+        <div class="time-scrubber-group">
+          <span class="time-readout">t: <output id="modalCurrentTime">0.00 s</output></span>
+          <input id="modalTimeSlider" class="time-scrubber" type="range" min="0" max="15" step="0.02" value="0.00" aria-label="Línea de tiempo modal">
+        </div>
+
+        <div class="transport-controls">
+          <span style="font:500 11px var(--font-mono); color:var(--muted)">Vista sincronizada</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra flotante minimizada (Dock) -->
+  <div id="minimizedDock" class="minimized-dock" role="region" aria-label="Simulación en miniatura">
+    <div class="dock-badge">
+      <span class="live-dot"></span>
+      <span>Simulación en curso</span>
+    </div>
+    <span class="dock-time">t: <output id="dockTimeReadout">0.00 s</output></span>
+    <button id="dockPlayToggle" class="icon-btn mini" type="button" title="Pausar / Reproducir" aria-label="Alternar reproducción">
+      <i class="fas fa-pause"></i>
+    </button>
+    <button id="restoreDockBtn" class="icon-btn mini primary" type="button" title="Restaurar ventana ampliada" aria-label="Restaurar ventana">
+      <i class="fas fa-window-restore"></i>
+    </button>
+    <button id="dockCloseBtn" class="icon-btn mini" type="button" title="Cerrar ventana definitivamente" aria-label="Cerrar ventana">
+      <i class="fas fa-xmark"></i>
+    </button>
+  </div>
+
+  <!-- Librerías KaTeX -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Scripts Modulares del Laboratorio -->
+  <script src="js/math-parser.js"></script>
+  <script src="js/wave-engine.js"></script>
+  <script src="js/geogebra-wave-plane.js"></script>
+  <script src="js/laboratorio.js"></script>
+</body>
+</html>

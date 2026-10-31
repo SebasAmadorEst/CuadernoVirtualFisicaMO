@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuaderno Interactivo Virtual: Movimiento Ondulatorio - Física 3</title>
+  <meta name="description"
+    content="Cuaderno digital interactivo de Física III sobre Movimiento Ondulatorio, Acústica, Fenómenos de Interferencia y Superposición con simuladores y audio en tiempo real.">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0284c7">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <!-- Estilos Maestros -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <script>
+    // Limpieza de Service Workers cruzados y cachés residuales de otros cuadernos
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function (regs) {
+        regs.forEach(function (r) { r.unregister(); });
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then(function (keys) {
+        keys.forEach(function (k) {
+          if (k.toLowerCase().includes('mas')) caches.delete(k);
+        });
+      });
+    }
+  </script>
+</head>
+
+<body>
+
+  <!-- Barra de navegación superior general -->
+  <header class="top-navbar">
+    <div class="brand-badge">
+      <div class="brand-title-group">
+        <h1>
+          <i class="fas fa-water" style="color: #00f0ff;"></i>
+          FÍSICA III
+          <span class="subject-tag">Movimiento Ondulatorio</span>
+        </h1>
+      </div>
+    </div>
+    <div class="top-actions">
+      <a class="top-btn" href="laboratorio.html" aria-label="Abrir laboratorio interactivo de Ondas">
+        <i class="fas fa-wave-square"></i> Laboratorio de Ondas
+      </a>
+      <a class="top-btn" href="laboratorio-doppler.html"
+        aria-label="Abrir laboratorio interactivo de Efecto Doppler y Cono de Mach">
+        <i class="fas fa-satellite-dish"></i> Lab. Doppler & Mach
+      </a>
+      <button class="top-btn" id="btnFullscreen"
+        onclick="document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()">
+        <i class="fas fa-expand"></i> Pantalla Completa
+      </button>
+    </div>
+  </header>
+
+  <!-- Visor del Cuaderno -->
+  <main class="notebook-viewport">
+    <div class="notebook-stage stage-closed" id="notebookStage">
+
+      <!-- Lomo central del cuaderno para vista a doble página -->
+      <div class="notebook-spine" id="notebookSpine" aria-hidden="true"></div>
+
+      <!-- ====================================================================
+           PORTADA: CUBIERTA EXTERIOR DEL CUADERNO (CERRADO)
+           ==================================================================== -->
+      <section class="notebook-page page-cover active" id="page-cover">
+        <div class="cover-image-container">
+          <img src="imagenes/portada.png" alt="Portada Oficial Cuaderno Física 3 - Movimiento Ondulatorio">
+          <div class="cover-interactive-overlay">
+          </div>
+        </div>
+      </section>
+      <!-- ====================================================================
+           PÁGINA 1: ÍNDICE GENERAL & RESEÑA HISTÓRICA
+           ==================================================================== -->
+      <section class="notebook-page" id="page-1">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Unidad I: Fundamentos y Cinemática Ondulatoria</span>
+            <span class="page-number-tag">Página 1 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-list-ol" style="color: #0284c7;"></i>
+            Índice de Contenidos & Reseña Histórica
+          </h2>
+          <p class="page-subtitle">Estructura curricular y contexto del desarrollo de la teoría ondulatoria clásica</p>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-bookmark"></i> Tabla de Contenidos Interactivo</h4>
+            <div class="contents-index-grid">
+              <div class="contents-section-label">Cinemática y Medios Materiales</div>
+              <a href="#" data-goto-page="0"><i class="fas fa-book"></i> <strong>Portada:</strong> Cubierta Oficial</a>
+              <a href="#" data-goto-page="1"><strong>Pág. 1:</strong> Índice & Reseña Histórica</a>
+              <a href="#" data-goto-page="2"><strong>Pág. 2:</strong> Línea de Tiempo & Mapa Mental</a>
+              <a href="#" data-goto-page="3"><strong>Pág. 3:</strong> Función de Onda & Deducción EDP 1D</a>
+              <a href="#" data-goto-page="4"><strong>Pág. 4:</strong> Ondas Armónicas & Simulador 1D</a>
+              <a href="#" data-goto-page="5"><strong>Pág. 5:</strong> Ondas en Barras Sólidas (Y, G)</a>
+              <a href="#" data-goto-page="6"><strong>Pág. 6:</strong> Fluidos y Sonido en Gases</a>
+              <a href="#" data-goto-page="7"><strong>Pág. 7:</strong> Cuerdas Tensas & Tensión Variable</a>
+              <a href="#" data-goto-page="8"><strong>Pág. 8:</strong> Superficie Libre de Líquidos</a>
+              <div class="contents-section-label">Energía, Acústica y Dimensiones</div>
+              <a href="#" data-goto-page="9"><strong>Pág. 9:</strong> Energía, Potencia e Intensidad</a>
+              <a href="#" data-goto-page="10"><strong>Pág. 10:</strong> Decibeles & Oído Humano</a>
+              <a href="#" data-goto-page="11"><strong>Pág. 11:</strong> Cualidades & Teclado Musical</a>
+              <a href="#" data-goto-page="12"><strong>Pág. 12:</strong> Ondas 3D & Ley Inversa</a>
+              <a href="#" data-goto-page="13"><strong>Pág. 13:</strong> Membranas 2D (Chladni)</a>
+              <div class="contents-section-label">Superposición, Fenómenos y Cierre</div>
+              <a href="#" data-goto-page="14"><strong>Pág. 14:</strong> Interferencia Espacial (Hipérbolas)</a>
+              <a href="#" data-goto-page="15"><strong>Pág. 15:</strong> Ondas Estacionarias en Cuerdas</a>
+              <a href="#" data-goto-page="16"><strong>Pág. 16:</strong> Tubos Sonoros (Abiertos/Cerrados)</a>
+              <a href="#" data-goto-page="17"><strong>Pág. 17:</strong> Efecto Doppler & Cono de Mach <span
+                  style="font-size:0.75rem; background:rgba(2,132,199,0.15); color:#0284c7; padding:2px 7px; border-radius:4px; font-weight:700; margin-left:6px;"><i
+                    class="fas fa-flask"></i> Lab</span></a>
+              <a href="#" data-goto-page="18"><strong>Pág. 18:</strong> Batimientos (Pulsaciones) & Audio</a>
+              <a href="#" data-goto-page="19"><strong>Pág. 19:</strong> Reflexión, Refracción & Fronteras</a>
+              <a href="#" data-goto-page="20"><strong>Pág. 20:</strong> Síntesis de Fourier & Quizzes</a>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-landmark"></i> Reseña Histórica del Movimiento Ondulatorio</h4>
+            <p class="text-paragraph">
+              El estudio de las ondas comenzó en la antigüedad con las observaciones de <strong>Pitágoras</strong> sobre
+              las longitudes armónicas de las cuerdas vibrantes. En el siglo XVII, <strong>Galileo Galilei</strong> e
+              <strong>Isaac Newton</strong> sentaron las bases dinámicas del sonido.
+            </p>
+            <p class="text-paragraph">
+              El salto cuantitativo definitivo ocurrió en 1747, cuando <strong>Jean le Rond d'Alembert</strong> dedujo
+              la ecuación diferencial en derivadas parciales para una cuerda vibrante. Más tarde, <strong>Leonhard
+                Euler</strong> y <strong>Daniel Bernoulli</strong> introdujeron la superposición modal, culminando en
+              1822 con <strong>Joseph Fourier</strong> y su teorema de descomposición espectral armónica.
+            </p>
+          </div>
+        </div>
+      </section>
+      <!-- ====================================================================
+           PÁGINA 2: LÍNEA DE TIEMPO & MAPA MENTAL
+           ==================================================================== -->
+      <section class="notebook-page" id="page-2">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Evolución Histórica y Científica</span>
+            <span class="page-number-tag">Página 2 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-hourglass-half" style="color: #0284c7;"></i>
+            Línea de Tiempo & Mapa Mental Ondulatorio
+          </h2>
+          <p class="page-subtitle">Hitos cronológicos fundamentales y conexiones conceptuales de la teoría ondulatoria
+          </p>
+
+          <div class="timeline-container">
+            <div class="timeline-node">
+              <div class="timeline-badge"><i class="fas fa-feather-alt"></i></div>
+              <div class="timeline-card">
+                <span class="timeline-year">1747</span>
+                <h4 class="timeline-scientist">Jean le Rond d'Alembert</h4>
+                <p class="text-paragraph">Formula la primera ecuación diferencial en derivadas parciales para la onda 1D
+                  en una cuerda y obtiene la célebre solución $\psi(x,t) = f(x - vt) + g(x + vt)$.</p>
+              </div>
+            </div>
+            <div class="timeline-node">
+              <div class="timeline-badge"><i class="fas fa-square-root-alt"></i></div>
+              <div class="timeline-card">
+                <span class="timeline-year">1750</span>
+                <h4 class="timeline-scientist">Leonhard Euler & Daniel Bernoulli</h4>
+                <p class="text-paragraph">Euler extiende la ecuación de onda al espacio tridimensional e hidrodinámica.
+                  Bernoulli propone que cualquier oscilación de una cuerda puede expresarse como suma de armónicos
+                  sinusoidales.</p>
+              </div>
+            </div>
+            <div class="timeline-node">
+              <div class="timeline-badge"><i class="fas fa-wave-square"></i></div>
+              <div class="timeline-card">
+                <span class="timeline-year">1822</span>
+                <h4 class="timeline-scientist">Joseph Fourier</h4>
+                <p class="text-paragraph">Publica la <em>Théorie analytique de la chaleur</em>, demostrando
+                  matemáticamente que cualquier función periódica puede reconstruirse como una serie infinita de senos y
+                  cosenos armónicos.</p>
+              </div>
+            </div>
+            <div class="timeline-node">
+              <div class="timeline-badge"><i class="fas fa-volume-up"></i></div>
+              <div class="timeline-card">
+                <span class="timeline-year">1842</span>
+                <h4 class="timeline-scientist">Christian Andreas Doppler</h4>
+                <p class="text-paragraph">Descubre el corrimiento de frecuencia aparente producido por el movimiento
+                  relativo entre la fuente emisora y el observador, revolucionando la acústica, la astronomía y el
+                  radar.</p>
+              </div>
+            </div>
+            <div class="timeline-node">
+              <div class="timeline-badge"><i class="fas fa-bolt"></i></div>
+              <div class="timeline-card">
+                <span class="timeline-year">1887</span>
+                <h4 class="timeline-scientist">Ernst Mach</h4>
+                <p class="text-paragraph">Fotografía por primera vez las ondas de choque producidas por proyectiles
+                  supersónicos y formula el semiángulo del cono envolvente: $\sin\theta = c/v_f = 1/M$.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mindmap-container">
+            <div class="mindmap-node-core">
+              MOVIMIENTO ONDULATORIO
+              <div style="font-size:0.75rem; font-weight:normal; margin-top:2px;">Transporte de energía sin transporte
+                de materia</div>
+            </div>
+            <div class="mindmap-branches">
+              <div class="mindmap-branch-card">
+                <h5>1. Cinemática</h5>
+                <p>$\psi(x,t) = f(x \mp vt)$, $v = \lambda f = \omega/k$.</p>
+              </div>
+              <div class="mindmap-branch-card">
+                <h5>2. Dinámica</h5>
+                <p>$v = \sqrt{Y/\rho}$, $v = \sqrt{B/\rho}$, $v = \sqrt{T/\mu}$.</p>
+              </div>
+              <div class="mindmap-branch-card">
+                <h5>3. Acústica</h5>
+                <p>$I = \frac{\Delta p^2}{2\rho v}$, $\beta = 10\log_{10}(I/I_0)$, escalas musicales.</p>
+              </div>
+              <div class="mindmap-branch-card">
+                <h5>4. Superposición</h5>
+                <p>Estacionarias, batimientos, Doppler y Fourier.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- ====================================================================
+           PÁGINA 3: FUNCIÓN DE ONDA Y DEDUCCIÓN EDP 1D
+           ==================================================================== -->
+      <section class="notebook-page" id="page-3">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Cinemática y Ecuación Diferencial</span>
+            <span class="page-number-tag">Página 3 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-calculator" style="color: #0284c7;"></i>
+            Función de Onda & Deducción de la EDP 1D
+          </h2>
+          <p class="page-subtitle">Formalismo matemático a partir del principio de perfil invariante y el sistema de
+            referencia móvil</p>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-lightbulb"></i> Concepto Físico de Onda</h4>
+            <p class="text-paragraph">
+              Una onda es la propagación de una perturbación física caracterizada por el <strong>transporte de energía e
+                ímpetu sin transporte neto de materia</strong>. Las partículas del medio elástico oscilan alrededor de
+              sus posiciones de equilibrio local sin trasladarse con el pulso.
+            </p>
+          </div>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-film"></i> Función de Onda Unidimensional General</h4>
+            <p class="text-paragraph">
+              Consideremos una perturbación $\psi(x,t)$ que avanza sin distorsión a velocidad constante $v$ a lo largo
+              del eje $X$. En $t=0$, el perfil espacial instantáneo es $\psi(x,0) = f(x)$.
+            </p>
+            <p class="text-paragraph">
+              Introduciendo un sistema móvil $S'$ con velocidad $v$ tal que $x' = x \mp vt$, en este sistema la forma es
+              estacionaria: $\psi = f(x')$. Sustituyendo $x'$ se obtiene la forma general de D'Alembert:
+            </p>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$\psi(x, t) = f(x \mp vt)$$</div>
+              <span class="math-equation-tag">(1)</span>
+            </div>
+            <p class="text-paragraph" style="font-size:0.85rem; color:#64748b;">
+              • Signo $(-)$: propagación hacia $+X$ (derecha). &nbsp;|&nbsp; • Signo $(+)$: propagación hacia $-X$
+              (izquierda).
+            </p>
+          </div>
+
+          <div class="concept-card" style="border-left-color: #00f0ff;">
+            <h4><i class="fas fa-cogs"></i> Deducción Rigurosa de la Ecuación Diferencial 1D</h4>
+            <p class="text-paragraph">
+              Sea $u = x - vt$. Por regla de la cadena derivamos parcialmente respecto a $x$ y respecto a $t$:
+            </p>
+            <div class="math-equation-content">
+              $$\frac{\partial \psi}{\partial x} = f'(u) \cdot 1 \implies \frac{\partial^2 \psi}{\partial x^2} =
+              f''(u)$$
+              $$\frac{\partial \psi}{\partial t} = f'(u) \cdot (-v) \implies \frac{\partial^2 \psi}{\partial t^2} = v^2
+              f''(u)$$
+            </div>
+            <p class="text-paragraph">Despejando $f''(u)$ e igualando ambos resultados obtenemos la ecuación maestra:
+            </p>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$\boxed{\frac{\partial^2 \psi}{\partial x^2} =
+                \frac{1}{v^2}\frac{\partial^2 \psi}{\partial t^2}}$$</div>
+              <span class="math-equation-tag">(2)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- ====================================================================
+           PÁGINA 4: ONDAS ARMÓNICAS & SIMULADOR 1D
+           ==================================================================== -->
+      <section class="notebook-page" id="page-4">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Cinemática y Laboratorio Virtual I</span>
+            <span class="page-number-tag">Página 4 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-chart-line" style="color: #0284c7;"></i>
+            Ondas Armónicas & Laboratorio 1D
+          </h2>
+          <p class="page-subtitle">Parámetros fundamentales de la onda sinusoidal y oscilación de partículas en tiempo
+            real</p>
+
+          <div class="math-equation-row" style="margin-bottom:8px;">
+            <div class="math-equation-content">
+              $$\psi(x, t) = A\sin(kx \mp \omega t + \phi), \quad k = \frac{2\pi}{\lambda}, \quad \omega = 2\pi f, \quad
+              v = \lambda f = \frac{\omega}{k}$$
+            </div>
+            <span class="math-equation-tag">(3)</span>
+          </div>
+
+          <!-- SIMULADOR INTERACTIVO 1D -->
+          <div class="simulator-box" style="margin-bottom:8px;">
+            <canvas id="canvasTravelingWave" class="sim-viewport-canvas" style="height:140px;"></canvas>
+            <div class="sim-controls-grid">
+              <div class="sim-control-item">
+                <label>Amplitud $A$</label>
+                <input type="range" id="sliderWaveA" min="0.2" max="2.0" step="0.1" value="1.2">
+              </div>
+              <div class="sim-control-item">
+                <label>Frecuencia $f$ [Hz]</label>
+                <input type="range" id="sliderWaveF" min="0.1" max="2.0" step="0.1" value="0.5">
+              </div>
+              <div class="sim-control-item">
+                <label>Longitud $\lambda$ [m]</label>
+                <input type="range" id="sliderWaveL" min="1.0" max="8.0" step="0.2" value="4.0">
+              </div>
+              <div class="sim-control-item">
+                <label>Dirección</label>
+                <button class="sim-btn secondary" id="btnWaveDir" style="padding:4px 8px; font-size:0.8rem;">
+                  <i class="fas fa-arrow-right"></i> +X (Derecha)
+                </button>
+              </div>
+            </div>
+            <div class="sim-action-bar">
+              <button class="sim-btn" id="btnWavePlay"><i class="fas fa-pause"></i> Pausar</button>
+              <button class="sim-btn secondary" id="btnWaveReset"><i class="fas fa-undo"></i> Reiniciar</button>
+              <div style="margin-left:auto; font-size:0.75rem; color:#94a3b8; display:flex; gap:12px;">
+                <span>v = <strong id="readWaveV" style="color:#00f0ff;">2.00 m/s</strong></span>
+                <span>k = <strong id="readWaveK" style="color:#10b981;">1.57 rad/m</strong></span>
+                <span>ω = <strong id="readWaveW" style="color:#f59e0b;">3.14 rad/s</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-card" style="border-left-color: #f97316;">
+            <h4><i class="fas fa-info-circle"></i> Cinemática de Partícula vs. Velocidad de Onda</h4>
+            <p class="text-paragraph" style="font-size:0.85rem;">
+              • <strong>Velocidad de fase $v = \lambda f$:</strong> Constante en un medio homogéneo; velocidad con que
+              se propaga la perturbación espacial.<br>
+              • <strong>Velocidad transversal de partícula $v_y = \frac{\partial \psi}{\partial t} = -\omega A \cos(kx -
+                \omega t)$:</strong> Movimiento Armónico Simple vertical con rapidez máxima $v_{y,\max} = \omega A$.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PÁGINA 5: ONDAS EN BARRAS SÓLIDAS (Y, G)
+           ==================================================================== -->
+      <section class="notebook-page" id="page-5">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Unidad II: Dinámica en Medios Materiales</span>
+            <span class="page-number-tag">Página 5 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-cubes" style="color: #0284c7;"></i>
+            Ondas Elásticas en Barras Sólidas
+          </h2>
+          <p class="page-subtitle">Deducción de velocidades de propagación para ondas longitudinales y de cizalladura
+          </p>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-arrows-alt-h"></i> 1. Ondas Longitudinales (Módulo de Young $Y$)</h4>
+            <p class="text-paragraph">
+              Un elemento de barra de longitud $dx$, sección $A$ y masa $dm = \rho A dx$ sufre deformación normal
+              unitaria $\epsilon = \frac{\partial s}{\partial x}$. Por la Ley de Hooke, la fuerza elástica es $F = Y A
+              \frac{\partial s}{\partial x}$. La fuerza resultante neta es $dF = Y A \frac{\partial^2 s}{\partial
+              x^2}dx$.
+            </p>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$Y A \frac{\partial^2 s}{\partial x^2}dx = (\rho A dx)\frac{\partial^2
+                s}{\partial t^2} \implies \boxed{v = \sqrt{\frac{Y}{\rho}}}$$</div>
+              <span class="math-equation-tag">(4)</span>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-arrows-alt-v"></i> 2. Ondas Transversales de Cizalladura (Módulo de Corte $G$)</h4>
+            <p class="text-paragraph">
+              Para deformaciones angulares por corte $\gamma \approx \frac{\partial y}{\partial x}$, el esfuerzo
+              cortante es $S = G \gamma = G \frac{\partial y}{\partial x}$. Aplicando la Segunda Ley de Newton
+              transversalmente:
+            </p>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$G A \frac{\partial^2 y}{\partial x^2}dx = (\rho A dx)\frac{\partial^2
+                y}{\partial t^2} \implies \boxed{v = \sqrt{\frac{G}{\rho}}}$$</div>
+              <span class="math-equation-tag">(5)</span>
+            </div>
+          </div>
+
+          <div class="science-table-container">
+            <div class="table-caption">Tabla 3-1 & 3-3: Parámetros elásticos de sólidos reales</div>
+            <table class="science-table">
+              <thead>
+                <tr>
+                  <th>Material</th>
+                  <th>Young $Y$ ($10^{10} \text{ N/m}^2$)</th>
+                  <th>Cizalla $G$ ($10^{10} \text{ N/m}^2$)</th>
+                  <th>Densidad $\rho$ ($\text{kg/m}^3$)</th>
+                  <th>$v_{\text{long}}$ ($\text{m/s}$)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Tungsteno</strong></td>
+                  <td>$35$</td>
+                  <td>$14$</td>
+                  <td>$19\,300$</td>
+                  <td>$\approx 4\,258$</td>
+                </tr>
+                <tr>
+                  <td><strong>Acero</strong></td>
+                  <td>$20$</td>
+                  <td>$16$</td>
+                  <td>$7\,800$</td>
+                  <td>$\approx 5\,064$</td>
+                </tr>
+                <tr>
+                  <td><strong>Cobre</strong></td>
+                  <td>$11$</td>
+                  <td>$14$</td>
+                  <td>$8\,900$</td>
+                  <td>$\approx 3\,516$</td>
+                </tr>
+                <tr>
+                  <td><strong>Aluminio</strong></td>
+                  <td>$7.0$</td>
+                  <td>$7.5$</td>
+                  <td>$2\,700$</td>
+                  <td>$\approx 5\,092$</td>
+                </tr>
+                <tr>
+                  <td><strong>Vidrio</strong></td>
+                  <td>$6.5 - 7.8$</td>
+                  <td>$5.0$</td>
+                  <td>$2\,500$</td>
+                  <td>$\approx 5\,100$</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PÁGINA 6: FLUIDOS Y SONIDO EN GASES
+           ==================================================================== -->
+      <section class="notebook-page" id="page-6">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Dinámica de Fluidos y Acústica</span>
+            <span class="page-number-tag">Página 6 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-wind" style="color: #0284c7;"></i>
+            Ondas de Presión en Fluidos y Gases
+          </h2>
+          <p class="page-subtitle">Módulo volumétrico B, comportamiento adiabático y variación térmica de la velocidad
+            del sonido</p>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-compress-arrows-alt"></i> Módulo Volumétrico y Ecuación de Onda Acústica</h4>
+            <p class="text-paragraph">
+              En un fluido compresible, el módulo volumétrico relaciona la variación de presión $\Delta p$ con el cambio
+              de volumen relativo: $B = -V \frac{dp}{dV} \implies \Delta p = -B \frac{\partial s}{\partial x}$.
+            </p>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$-\frac{\partial p}{\partial x}A dx = (\rho_0 A dx)\frac{\partial^2
+                s}{\partial t^2} \implies \boxed{v = \sqrt{\frac{B}{\rho_0}}}$$</div>
+              <span class="math-equation-tag">(6)</span>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-thermometer-half"></i> Sonido en Gases Ideales: Proceso Adiabático</h4>
+            <p class="text-paragraph">
+              Las oscilaciones acústicas son adiabáticas ($p V^\gamma = \text{cte} \implies B_{\text{ad}} = \gamma p$).
+              Con la ecuación de gas ideal $p/\rho = RT/M$:
+            </p>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$\boxed{v = \sqrt{\frac{\gamma R T}{M}} \approx 331.3\sqrt{1 +
+                \frac{T_C}{273.15}} \approx 331.3 + 0.606 \, T_C \quad [\text{m/s}]}$$</div>
+              <span class="math-equation-tag">(7)</span>
+            </div>
+          </div>
+
+          <div class="exercise-solver-card">
+            <div class="exercise-header">
+              <h3><i class="fas fa-plane" style="color:#0284c7;"></i> Ejemplo 3-4: Gradiente Térmico Atmosférico</h3>
+            </div>
+            <div class="exercise-enunciado">
+              El aire se enfría $1^\circ\text{C}$ por cada $150\text{ m}$ de altitud hasta $9000\text{ m}$. Si en el
+              suelo $T_0 = 30^\circ\text{C}$ ($303.15\text{ K}$), ¿cuánto tarda el sonido de un avión a $9000\text{ m}$
+              en llegar al suelo?
+            </div>
+            <div class="step-despejes">
+              <div class="step-despejes-title"><i class="fas fa-calculator"></i> Integración temporal:</div>
+              <div class="math-equation-content">$$t = \int_0^H \frac{dy}{v(y)} = \frac{2}{\alpha C}\left[\sqrt{T_0} -
+                \sqrt{T_0 - \alpha H}\right] \approx \mathbf{27.2\text{ s}}$$</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PÁGINA 7: ONDAS EN CUERDAS TENSAS
+           ==================================================================== -->
+      <section class="notebook-page" id="page-7">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Mecánica de Cuerdas Tensas</span>
+            <span class="page-number-tag">Página 7 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-bezier-curve" style="color: #0284c7;"></i>
+            Ondas Transversales en Cuerdas Tensas
+          </h2>
+          <p class="page-subtitle">Deducción de la velocidad transversal, tensión variable y laboratorio interactivo</p>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-drafting-compass"></i> Deducción Dinámica por Curvatura</h4>
+            <p class="text-paragraph">
+              Un elemento de cuerda $dx$ bajo tensión $T$ y densidad lineal $\mu = dm/dx$ experimenta una fuerza neta
+              vertical por curvatura: $\sum F_y = T \frac{\partial^2 y}{\partial x^2}dx$. Por la Segunda Ley de Newton:
+            </p>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$T \frac{\partial^2 y}{\partial x^2}dx = (\mu dx)\frac{\partial^2
+                y}{\partial t^2} \implies \boxed{v = \sqrt{\frac{T}{\mu}}}$$</div>
+              <span class="math-equation-tag">(8)</span>
+            </div>
+          </div>
+
+          <!-- SIMULADOR INTERACTIVO DE CUERDA TENSA -->
+          <div class="simulator-box" style="margin-bottom:8px;">
+            <canvas id="canvasStringWave" class="sim-viewport-canvas" style="height:120px;"></canvas>
+            <div class="sim-controls-grid">
+              <div class="sim-control-item">
+                <label>Tensión $T$ [N]</label>
+                <input type="range" id="sliderStringT" min="10" max="200" step="5" value="50">
+              </div>
+              <div class="sim-control-item">
+                <label>Densidad $\mu$ [kg/m]</label>
+                <input type="range" id="sliderStringMu" min="0.001" max="0.02" step="0.001" value="0.005">
+              </div>
+              <div class="sim-control-item">
+                <label>Disparar pulso</label>
+                <button class="sim-btn" id="btnStringPulse" style="padding:4px 10px; font-size:0.8rem;">
+                  <i class="fas fa-bolt"></i> Enviar Pulso
+                </button>
+              </div>
+              <div class="sim-control-item">
+                <label>Velocidad calculada</label>
+                <span id="readStringV"
+                  style="font-family:var(--font-mono); font-size:1.1rem; color:#38bdf8; font-weight:700;">100.0
+                  m/s</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-card" style="border-left-color:#8b5cf6;">
+            <h4><i class="fas fa-weight-hanging"></i> Cuerda Colgante Pesada (Tensión Variable)</h4>
+            <p class="text-paragraph" style="font-size:0.85rem;">
+              Para una cuerda suspendida de masa $m$ y longitud $L$ con una carga $M$ en su extremo inferior, $T(y) =
+              g(M + \mu y)$. El tiempo que tarda un pulso en recorrerla de abajo hacia arriba es:
+            </p>
+            <div class="math-equation-content">$$t = \int_0^L \frac{dy}{\sqrt{g(y + M/\mu)}} =
+              2\sqrt{\frac{L}{mg}}\left[\sqrt{M + m} - \sqrt{M}\right]$$</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PÁGINA 8: SUPERFICIE LIBRE DE LÍQUIDOS
+           ==================================================================== -->
+      <section class="notebook-page" id="page-8">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Hidrodinámica de Superficies Libres</span>
+            <span class="page-number-tag">Página 8 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-water" style="color: #0284c7;"></i>
+            Ondas en la Superficie Libre de Líquidos
+          </h2>
+          <p class="page-subtitle">Dispersión general, ondas gravitacionales, ondas capilares y régimen de aguas someras
+          </p>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-wave-square"></i> Ecuación de Dispersión General</h4>
+            <p class="text-paragraph">
+              Para ondas superficiales en un líquido de profundidad $h$, densidad $\rho$ y tensión superficial $\tau$:
+            </p>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$v = \sqrt{\left(\frac{g\lambda}{2\pi} + \frac{2\pi \tau}{\rho
+                \lambda}\right)\tanh\left(\frac{2\pi h}{\lambda}\right)}$$</div>
+              <span class="math-equation-tag">(9)</span>
+            </div>
+          </div>
+
+          <div class="mindmap-branches" style="margin-bottom:8px;">
+            <div class="mindmap-branch-card">
+              <h5>1. Ondas de Gravedad</h5>
+              <p>Aguas profundas ($\lambda \gg 2\text{ cm}$):</p>
+              <div class="math-equation-content">$$v = \sqrt{\frac{g\lambda}{2\pi}}$$</div>
+              <p>Dispersivo: mayor $\lambda \implies$ mayor rapidez.</p>
+            </div>
+            <div class="mindmap-branch-card">
+              <h5>2. Ondas Capilares (Rizado)</h5>
+              <p>Longitudes mínimas ($\lambda \ll 1\text{ cm}$):</p>
+              <div class="math-equation-content">$$v = \sqrt{\frac{2\pi \tau}{\rho \lambda}}$$</div>
+              <p>Dispersión anómala: menor $\lambda \implies$ mayor rapidez.</p>
+            </div>
+            <div class="mindmap-branch-card">
+              <h5>3. Aguas Someras ($h \ll \lambda$)</h5>
+              <p>Profundidad somera (Tsunamis):</p>
+              <div class="math-equation-content">$$\boxed{v = \sqrt{gh}}$$</div>
+              <p><strong>No dispersivo:</strong> independiente de $\lambda$.</p>
+            </div>
+          </div>
+
+          <div class="concept-card" style="border-left-color:#10b981; background:rgba(16, 185, 129, 0.05);">
+            <h4><i class="fas fa-shield-alt"></i> Aplicación Geofísica: Tsunamis en Mar Abierto</h4>
+            <p class="text-paragraph" style="font-size:0.85rem;">
+              En el océano profundo ($h \approx 4000\text{ m}$), la longitud de onda de un maremoto supera los
+              $100\text{ km}$ ($h \ll \lambda$). La rapidez del tsunami es $v = \sqrt{(9.8)(4000)} \approx 200\text{
+              m/s} = 720\text{ km/h}$ (velocidad de avión de pasajeros).
+            </p>
+          </div>
+
+          <!-- QUIZ 1: CINEMÁTICA Y MEDIOS MATERIALES -->
+          <div class="quiz-panel" data-quiz-page="page-8">
+            <div class="quiz-panel-header">
+              <h3 class="quiz-panel-title"><i class="fas fa-brain" style="color:#0284c7;"></i> Quiz 1: Cinemática y
+                Propagación en Medios Materiales</h3>
+              <button class="quiz-reset-btn" type="button"><i class="fas fa-rotate-left"></i> Reiniciar</button>
+            </div>
+            <form class="quiz-form">
+              <div class="quiz-question" data-answer="b"
+                data-answer-text="b) De la tensión mecánica T y la densidad lineal μ (v = √(T/μ))">
+                <div class="quiz-question-title">1. ¿De qué magnitudes depende la velocidad de propagación de una onda
+                  transversal en una cuerda tensa?</div>
+                <div class="quiz-options">
+                  <label class="quiz-option"><input type="radio" name="p8_q1" value="a"> a) De la amplitud y frecuencia
+                    angular de la fuente osciladora</label>
+                  <label class="quiz-option"><input type="radio" name="p8_q1" value="b"> b) De la tensión mecánica $T$ y
+                    la densidad lineal $\mu$ ($v = \sqrt{T/\mu}$)</label>
+                  <label class="quiz-option"><input type="radio" name="p8_q1" value="c"> c) De la aceleración
+                    gravitacional y la longitud total</label>
+                  <label class="quiz-option"><input type="radio" name="p8_q1" value="d"> d) Exclusivamente del período
+                    de oscilación temporal</label>
+                </div>
+                <div class="quiz-feedback"></div>
+              </div>
+
+              <div class="quiz-question" data-answer="c" data-answer-text="c) Aumenta en un factor de √2 ≈ 1.414">
+                <div class="quiz-question-title">2. Si en una barra sólida se duplica el módulo de Young ($Y \to 2Y$)
+                  manteniendo $\rho$ constante, la velocidad longitudinal:</div>
+                <div class="quiz-options">
+                  <label class="quiz-option"><input type="radio" name="p8_q2" value="a"> a) Se duplica exactamente
+                    ($2\times$)</label>
+                  <label class="quiz-option"><input type="radio" name="p8_q2" value="b"> b) Se reduce a la mitad
+                    ($0.5\times$)</label>
+                  <label class="quiz-option"><input type="radio" name="p8_q2" value="c"> c) Aumenta en un factor de
+                    $\sqrt{2} \approx 1.414$</label>
+                  <label class="quiz-option"><input type="radio" name="p8_q2" value="d"> d) Permanece inalterada</label>
+                </div>
+                <div class="quiz-feedback"></div>
+              </div>
+
+              <div class="quiz-question" data-answer="a"
+                data-answer-text="a) Porque las compresiones son tan veloces que no hay transferencia de calor (proceso adiabático Q=0)">
+                <div class="quiz-question-title">3. ¿Por qué en un gas ideal la velocidad del sonido utiliza el módulo
+                  adiabático $B_s = \gamma P$ en vez del isotérmico?</div>
+                <div class="quiz-options">
+                  <label class="quiz-option"><input type="radio" name="p8_q3" value="a"> a) Porque las compresiones y
+                    rarefacciones son tan rápidas que no hay transferencia de calor ($Q = 0$)</label>
+                  <label class="quiz-option"><input type="radio" name="p8_q3" value="b"> b) Porque la temperatura
+                    permanece estrictamente constante en todo el gas</label>
+                  <label class="quiz-option"><input type="radio" name="p8_q3" value="c"> c) Porque la densidad del gas
+                    se hace nula en las crestas</label>
+                  <label class="quiz-option"><input type="radio" name="p8_q3" value="d"> d) Porque el aire no posee masa
+                    molecular definida</label>
+                </div>
+                <div class="quiz-feedback"></div>
+              </div>
+
+              <div class="quiz-question" data-answer="b"
+                data-answer-text="b) La aceleración de la gravedad g (ondas de gravedad)">
+                <div class="quiz-question-title">4. En aguas profundas ($\lambda \gg 2\text{ cm}$), ¿cuál es la fuerza
+                  restauradora gobernante?</div>
+                <div class="quiz-options">
+                  <label class="quiz-option"><input type="radio" name="p8_q4" value="a"> a) La tensión superficial
+                    molecular $\tau$</label>
+                  <label class="quiz-option"><input type="radio" name="p8_q4" value="b"> b) La aceleración de la
+                    gravedad $g$ ($v = \sqrt{g\lambda / 2\pi}$)</label>
+                  <label class="quiz-option"><input type="radio" name="p8_q4" value="c"> c) La viscosidad dinámica del
+                    fluido</label>
+                  <label class="quiz-option"><input type="radio" name="p8_q4" value="d"> d) La compresibilidad
+                    volumétrica</label>
+                </div>
+                <div class="quiz-feedback"></div>
+              </div>
+
+              <div class="quiz-actions">
+                <button class="quiz-validate-btn" type="button"><i class="fas fa-check-circle"></i> Validar
+                  Respuestas</button>
+              </div>
+              <div class="quiz-result" role="status" aria-live="polite"></div>
+            </form>
+          </div>
+
+        </div>
+      </section>
+      <!-- ====================================================================
+           PÁGINA 9: ENERGÍA, POTENCIA E INTENSIDAD
+           ==================================================================== -->
+      <section class="notebook-page" id="page-9">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Unidad III: Energía, Potencia e Intensidad</span>
+            <span class="page-number-tag">Página 9 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-bolt" style="color: #0284c7;"></i>
+            Transporte de Energía e Intensidad Sonora
+          </h2>
+          <p class="page-subtitle">Densidad de energía, flujo de potencia media y relación dual desplazamiento-presión
+          </p>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-tachometer-alt"></i> Potencia Instantánea y Potencia Media</h4>
+            <p class="text-paragraph">
+              El flujo de energía a través de una sección $A$ es el trabajo por unidad de tiempo: $P(x,t) = F \cdot
+              v_{\text{osc}}$. Al promediar en un ciclo temporal completo $T$, dado que $\langle\sin^2\rangle = 1/2$:
+            </p>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$\boxed{\bar{P} = \frac{1}{2}\rho v A \omega^2 s_{\max}^2 = 2\pi^2
+                \rho v A f^2 s_{\max}^2}$$</div>
+              <span class="math-equation-tag">(10)</span>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-sun"></i> Intensidad Ondulatoria $I$</h4>
+            <p class="text-paragraph">Potencia promedio transferida por unidad de área perpendicular:</p>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$\boxed{I = \frac{\bar{P}}{A} = \frac{1}{2}\rho v \omega^2 s_{\max}^2
+                = 2\pi^2 \rho v f^2 s_{\max}^2} \quad [\text{W/m}^2]$$</div>
+              <span class="math-equation-tag">(11)</span>
+            </div>
+            <p class="text-paragraph" style="font-size:0.85rem; color:#64748b;">
+              • <em>Ley cuadrática:</em> La intensidad es proporcional al cuadrado de la amplitud ($s_{\max}^2$) y al
+              cuadrado de la frecuencia ($f^2$).
+            </p>
+          </div>
+
+          <div class="concept-card" style="border-left-color:#ef4444;">
+            <h4><i class="fas fa-compress"></i> Dualidad Desplazamiento - Presión en Sonido</h4>
+            <p class="text-paragraph" style="font-size:0.85rem;">
+              La onda acústica de desplazamiento y la de presión están desfasadas $90^\circ$ ($\pi/2\text{ rad}$):
+            </p>
+            <div class="math-equation-content">
+              $$\Delta p(x,t) = -B\frac{\partial s}{\partial x} \implies \Delta p_{\max} = \rho v \omega s_{\max}$$
+              $$\boxed{I = \frac{(\Delta p_{\max})^2}{2\rho v}}$$
+            </div>
+            <p class="text-paragraph" style="font-size:0.82rem; color:#64748b;">
+              Donde el desplazamiento molecular es nulo (equilibrio), la compresión acústica es máxima.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PÁGINA 10: ESCALA DE DECIBELES Y OÍDO HUMANO
+           ==================================================================== -->
+      <section class="notebook-page" id="page-10">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Acústica Fisiológica y Medición</span>
+            <span class="page-number-tag">Página 10 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-volume-up" style="color: #0284c7;"></i>
+            Nivel Sonoro (dB) & Anatomía Auditiva
+          </h2>
+          <p class="page-subtitle">Escala logarítmica de decibeles, suma de intensidades y respuesta del oído humano</p>
+
+          <div class="math-equation-row" style="margin-bottom:8px;">
+            <div class="math-equation-content">
+              $$\beta = 10 \log_{10}\left(\frac{I}{I_0}\right) \quad [\text{dB}], \quad I_0 = 10^{-12} \text{ W/m}^2,
+              \quad I = I_0 \cdot 10^{\beta/10}$$
+            </div>
+            <span class="math-equation-tag">(12)</span>
+          </div>
+
+          <!-- CALCULADORA ACÚSTICA: SONÓMETRO DE LABORATORIO -->
+          <div class="acoustic-lab-calculator">
+            <!-- Barra superior del instrumento -->
+            <div class="sonometer-topbar">
+              <div class="sonometer-brand">
+                <span class="sonometer-led-power"></span>
+                <span class="brand-text">SONO-DIGITAL <strong>SL-900</strong></span>
+                <span class="brand-model">ANALIZADOR ACÚSTICO DUAL</span>
+              </div>
+              <div class="sonometer-mode-tags">
+                <span class="mode-tag"><i class="fas fa-microchip"></i> DSP 24-BIT</span>
+                <span class="mode-tag tag-active"><i class="fas fa-wave-square"></i> SUMA LOGARÍTMICA</span>
+              </div>
+            </div>
+
+            <!-- Pantalla Digital Principal (OLED High-Tech) -->
+            <div class="sonometer-oled-screen">
+              <div class="oled-status-row">
+                <span class="oled-status-label"><i class="fas fa-broadcast-tower"></i> NIVEL SONORO RESULTANTE COMBINADO
+                  ($\beta_{\text{tot}}$)</span>
+                <span class="oled-timestamp">$I_0 = 10^{-12} \text{ W/m}^2$</span>
+              </div>
+
+              <div class="oled-main-display">
+                <div class="oled-value-cluster">
+                  <span class="oled-digits" id="sonoBetaTot">81.19</span>
+                  <span class="oled-unit">dB</span>
+                </div>
+                <div class="oled-secondary-data">
+                  <div class="oled-data-item">
+                    <span class="oled-data-label">Intensidad Total ($I_{\text{tot}}$):</span>
+                    <strong class="oled-data-value" id="sonoITot">1.316 × 10⁻⁴ W/m²</strong>
+                  </div>
+                  <div class="oled-data-item">
+                    <span class="oled-data-label">Aporte diferencial:</span>
+                    <strong class="oled-data-value" id="sonoDelta">+1.19 dB s/máx</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Segmented LED Bar Gauge -->
+              <div class="sonometer-led-gauge">
+                <div class="gauge-labels">
+                  <span>0 dB (Umbral)</span>
+                  <span>30</span>
+                  <span>60 (Charla)</span>
+                  <span>85 (Límite Seguro)</span>
+                  <span>100 (Peligro)</span>
+                  <span>120+ dB (Dolor)</span>
+                </div>
+                <div class="gauge-track">
+                  <div class="gauge-fill-bar" id="gaugeBar" style="width: 62%;"></div>
+                  <div class="gauge-cursor" id="gaugeCursor" style="left: 62%;"></div>
+                </div>
+              </div>
+
+              <!-- Live Interpretation Banner -->
+              <div class="oled-insight-banner" id="sonoInsight">
+                <i class="fas fa-lightbulb" style="color:#f59e0b;"></i> Combinación acústica: 80.0 dB y 75.0 dB se
+                superponen produciendo 81.19 dB (+1.19 dB sobre la fuente mayor).
+              </div>
+            </div>
+
+            <!-- Canales de Entrada Dual (Canal A y Canal B) -->
+            <div class="sonometer-channels-grid">
+              <!-- CANAL 1 -->
+              <div class="channel-console-card channel-a">
+                <div class="channel-top">
+                  <div class="channel-badge"><span class="ch-led led-cyan"></span> CANAL A (Fuente 1)</div>
+                  <span class="channel-beta-pill" id="readCh1Beta">80.0 dB</span>
+                </div>
+
+                <div class="channel-slider-wrap">
+                  <div class="ch-slider-label">
+                    <span>Nivel sonoro ($\beta_1$):</span>
+                    <strong id="labelCh1Beta" style="color:#00f0ff;">80 dB</strong>
+                  </div>
+                  <input type="range" class="sono-slider" id="sliderCh1Beta" min="0" max="120" step="1" value="80">
+                </div>
+
+                <div class="channel-input-alt">
+                  <label for="inputSonoI1">Intensidad $I_1$ (W/m²):</label>
+                  <input type="number" class="sono-num-input" id="inputSonoI1" step="any" value="0.0001">
+                </div>
+              </div>
+
+              <!-- CANAL 2 -->
+              <div class="channel-console-card channel-b">
+                <div class="channel-top">
+                  <div class="channel-badge"><span class="ch-led led-purple"></span> CANAL B (Fuente 2)</div>
+                  <span class="channel-beta-pill" id="readCh2Beta">75.0 dB</span>
+                </div>
+
+                <div class="channel-slider-wrap">
+                  <div class="ch-slider-label">
+                    <span>Nivel sonoro ($\beta_2$):</span>
+                    <strong id="labelCh2Beta" style="color:#c084fc;">75 dB</strong>
+                  </div>
+                  <input type="range" class="sono-slider slider-purple" id="sliderCh2Beta" min="0" max="120" step="1"
+                    value="75">
+                </div>
+
+                <div class="channel-input-alt">
+                  <label for="inputSonoI2">Intensidad $I_2$ (W/m²):</label>
+                  <input type="number" class="sono-num-input" id="inputSonoI2" step="any" value="0.0000316">
+                </div>
+              </div>
+            </div>
+
+            <!-- Barra de Presets Rápidos Táctiles y Audio Web -->
+            <div class="sonometer-actions-footer">
+              <div class="sono-presets-cluster">
+                <span class="presets-title"><i class="fas fa-bolt"></i> Escenarios Reales:</span>
+                <button type="button" class="sono-preset-btn" data-b1="60" data-b2="60">
+                  🗣️ 60 + 60 dB
+                </button>
+                <button type="button" class="sono-preset-btn" data-b1="80" data-b2="100">
+                  🚗 80 + 🚨 100 dB
+                </button>
+                <button type="button" class="sono-preset-btn" data-b1="30" data-b2="70">
+                  🍃 30 + 🎵 70 dB
+                </button>
+                <button type="button" class="sono-preset-btn" data-b1="100" data-b2="110">
+                  🎸 100 + ✈️ 110 dB
+                </button>
+              </div>
+
+              <div class="sono-audio-cluster">
+                <button type="button" class="btn-sono-audio" id="btnPlaySonoTone">
+                  <i class="fas fa-volume-high"></i> <span>Escuchar Tono Combinado</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-card" style="border-left-color:#8b5cf6;">
+            <h4><i class="fas fa-weight-hanging"></i> Cuerda Colgante Pesada (Tensión Variable)</h4>
+            <p class="text-paragraph" style="font-size:0.85rem;">
+              Para una cuerda suspendida de masa $m$ y longitud $L$ con una carga $M$ en su extremo inferior, $T(y) =
+              g(M + \mu y)$. El tiempo que tarda un pulso en recorrerla de abajo hacia arriba es:
+            </p>
+            <div class="math-equation-content">$$t = \int_0^L \frac{dy}{\sqrt{g(y + M/\mu)}} =
+              2\sqrt{\frac{L}{mg}}\left[\sqrt{M + m} - \sqrt{M}\right]$$</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PÁGINA 11: CUALIDADES Y TECLADO MUSICAL
+           ==================================================================== -->
+      <section class="notebook-page" id="page-11">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Unidad IV: Acústica Musical y Percepción</span>
+            <span class="page-number-tag">Página 11 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-music" style="color: #0284c7;"></i>
+            Cualidades del Sonido & Escala Musical
+          </h2>
+          <p class="page-subtitle">Afinación temperada, fórmula computacional y sintetizador interactivo con Web Audio
+            API</p>
+
+          <div class="concept-card" style="margin-bottom:8px;">
+            <h4><i class="fas fa-sliders-h"></i> Cualidades Perceptivas del Sonido</h4>
+            <p class="text-paragraph" style="font-size:0.85rem;">
+              • <strong>Tono (Altura):</strong> Determinado por la frecuencia fundamental $f_0$. Graves vs. Agudos.<br>
+              • <strong>Intensidad (Sonoridad):</strong> Relacionada con la potencia y amplitud acústica $\Delta
+              p_{\max}$.<br>
+              • <strong>Timbre:</strong> Contenido espectral; pesos relativos de los armónicos que diferencian dos
+              instrumentos.
+            </p>
+          </div>
+
+          <div class="concept-card" style="border-left-color:#00f0ff; margin-bottom:8px;">
+            <h4><i class="fas fa-code"></i> Ecuación de la Escala Temperada</h4>
+            <p class="text-paragraph" style="font-size:0.85rem;">
+              Con la nota La 4 (440 Hz) como referencia internacional, la frecuencia del semitono $n$ en la octava $m$
+              es:
+            </p>
+            <div class="math-equation-content">$$\boxed{f(n, m) = 440 \cdot 2^{(m - 3) + \frac{n - 10}{12}}}$$</div>
+          </div>
+
+          <!-- TECLADO MUSICAL INTERACTIVO -->
+          <div class="simulator-box" style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span style="font-size:0.82rem; font-weight:700; color:#00f0ff;"><i class="fas fa-play"></i> Teclado
+                Interactivo Web Audio</span>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <label style="font-size:0.75rem; color:#94a3b8;">Octava:</label>
+                <select id="selectKeyboardOctave" class="preset-select" style="padding:2px 8px; font-size:0.78rem;">
+                  <option value="2">2ª Octava</option>
+                  <option value="3" selected>3ª Octava (Central)</option>
+                  <option value="4">4ª Octava</option>
+                </select>
+              </div>
+            </div>
+            <div class="piano-keyboard-container" id="pianoKeyboardGrid">
+              <!-- Teclas generadas dinámicamente -->
+            </div>
+            <div id="keyboardNoteReadout"
+              style="font-family:var(--font-mono); font-size:0.8rem; color:#10b981; text-align:center;">
+              Haz clic en cualquier tecla para escuchar su tono senoidal puro generado en tiempo real.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PÁGINA 12: ONDAS 3D Y LEY INVERSA
+           ==================================================================== -->
+      <section class="notebook-page" id="page-12">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Ondas Tridimensionales</span>
+            <span class="page-number-tag">Página 12 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-globe" style="color: #0284c7;"></i>
+            Ondas 3D & Ley del Inverso del Cuadrado
+          </h2>
+          <p class="page-subtitle">Operador Laplaciano en diversas geometrías y decaimiento esférico de intensidad</p>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-cube"></i> Ecuación Tridimensional con el Operador Laplaciano</h4>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$\nabla^2 \psi = \frac{1}{v^2}\frac{\partial^2 \psi}{\partial t^2},
+                \quad \nabla^2 = \frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y^2} +
+                \frac{\partial^2}{\partial z^2}$$</div>
+              <span class="math-equation-tag">(13)</span>
+            </div>
+            <p class="text-paragraph" style="font-size:0.85rem;">
+              • <strong>Onda Plana:</strong> $\psi(\vec{r}, t) = A\sin(\vec{k}\cdot\vec{r} - \omega t)$ con frentes de
+              onda planos ortogonales al vector $\vec{k}$.
+            </p>
+          </div>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-circle-notch"></i> Ondas Esféricas y Conservación de Potencia</h4>
+            <p class="text-paragraph" style="font-size:0.85rem;">
+              Para una fuente puntual isotrópica, el Laplaciano radial es $\nabla^2 \psi = \frac{1}{r}\frac{\partial^2
+              (r\psi)}{\partial r^2}$. La solución armónica divergente es:
+            </p>
+            <div class="math-equation-content">$$\boxed{\psi(r, t) = \frac{A}{r}\sin(kr - \omega t)}$$</div>
+            <p class="text-paragraph" style="font-size:0.85rem;">
+              Por conservación de energía en esferas concéntricas de área $4\pi r^2$:
+            </p>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$P = I(r) \cdot 4\pi r^2 = \text{cte} \implies \boxed{I(r) =
+                \frac{P}{4\pi r^2} \propto \frac{1}{r^2}}$$</div>
+              <span class="math-equation-tag">(14)</span>
+            </div>
+          </div>
+
+          <div class="exercise-solver-card">
+            <div class="exercise-header">
+              <h3><i class="fas fa-bomb" style="color:#ef4444;"></i> Ejemplo 3-12: Detonación y Atenuación</h3>
+            </div>
+            <div class="exercise-enunciado">
+              A $400\text{ m}$ de una explosión $\Delta p_{\max} = 10\text{ N/m}^2$. Con absorción atmosférica de
+              $7.0\text{ dB/km}$, hallar $\beta$ a $4\text{ km}$ ($4000\text{ m}$).
+            </div>
+            <div class="step-despejes">
+              <div class="step-despejes-title"><i class="fas fa-calculator"></i> Cálculo:</div>
+              <p class="despeje-item">$\beta(400) = 110.5\text{ dB}$. Atenuación geométrica: $20\log_{10}(400/4000) =
+                -20\text{ dB}$. Absorción: $7.0 \times 3.6 = 25.2\text{ dB}$.</p>
+              <div class="math-equation-content">$$\beta(4\text{ km}) = 110.5 - 20 - 25.2 = \mathbf{65.3\text{ dB}}$$
+              </div>
+            </div>
+          </div>
+
+          <!-- QUIZ 2: ENERGÍA, INTENSIDAD Y NIVEL SONORO -->
+          <div class="quiz-panel" data-quiz-page="page-12">
+            <div class="quiz-panel-header">
+              <h3 class="quiz-panel-title"><i class="fas fa-brain" style="color:#0284c7;"></i> Quiz 2: Energía,
+                Intensidad y Nivel Sonoro</h3>
+              <button class="quiz-reset-btn" type="button"><i class="fas fa-rotate-left"></i> Reiniciar</button>
+            </div>
+            <form class="quiz-form">
+              <div class="quiz-question" data-answer="b" data-answer-text="b) 63 dB (duplicar potencia añade +3.01 dB)">
+                <div class="quiz-question-title">1. Dos personas hablan al mismo tiempo emitiendo cada una 60 dB en el
+                  mismo punto. ¿El nivel combinado es?</div>
+                <div class="quiz-options">
+                  <label class="quiz-option"><input type="radio" name="p12_q1" value="a"> a) 120 dB (suma lineal
+                    directa)</label>
+                  <label class="quiz-option"><input type="radio" name="p12_q1" value="b"> b) 63 dB (duplicar la potencia
+                    física añade $+10\log_{10}(2) \approx +3.01\text{ dB}$)</label>
+                  <label class="quiz-option"><input type="radio" name="p12_q1" value="c"> c) 60 dB (el nivel no
+                    cambia)</label>
+                  <label class="quiz-option"><input type="radio" name="p12_q1" value="d"> d) 90 dB</label>
+                </div>
+                <div class="quiz-feedback"></div>
+              </div>
+
+              <div class="quiz-question" data-answer="b"
+                data-answer-text="b) Se divide entre 9 (ley del inverso al cuadrado I ∝ 1/r²)">
+                <div class="quiz-question-title">2. Para una onda esférica emitida por una fuente puntual, si la
+                  distancia se triplica ($r \to 3r$), la intensidad $I$:</div>
+                <div class="quiz-options">
+                  <label class="quiz-option"><input type="radio" name="p12_q2" value="a"> a) Se divide entre 3</label>
+                  <label class="quiz-option"><input type="radio" name="p12_q2" value="b"> b) Se divide entre 9 ($I
+                    \propto 1/r^2$)</label>
+                  <label class="quiz-option"><input type="radio" name="p12_q2" value="c"> c) Se reduce en $3\text{
+                    dB}$</label>
+                  <label class="quiz-option"><input type="radio" name="p12_q2" value="d"> d) Permanece constante</label>
+                </div>
+                <div class="quiz-feedback"></div>
+              </div>
+
+              <div class="quiz-question" data-answer="b" data-answer-text="b) 120 dB y 1 W/m²">
+                <div class="quiz-question-title">3. ¿Cuáles son los valores correspondientes al umbral de dolor auditivo
+                  típico humano?</div>
+                <div class="quiz-options">
+                  <label class="quiz-option"><input type="radio" name="p12_q3" value="a"> a) $60\text{ dB}$ e intensidad
+                    $10^{-6}\text{ W/m}^2$</label>
+                  <label class="quiz-option"><input type="radio" name="p12_q3" value="b"> b) $120\text{ dB}$ e
+                    intensidad $1\text{ W/m}^2$</label>
+                  <label class="quiz-option"><input type="radio" name="p12_q3" value="c"> c) $0\text{ dB}$ e intensidad
+                    $10^{-12}\text{ W/m}^2$</label>
+                  <label class="quiz-option"><input type="radio" name="p12_q3" value="d"> d) $160\text{ dB}$ e
+                    intensidad $100\text{ W/m}^2$</label>
+                </div>
+                <div class="quiz-feedback"></div>
+              </div>
+
+              <div class="quiz-question" data-answer="a"
+                data-answer-text="a) Son iguales en promedio temporal (⟨u_k⟩ = ⟨u_p⟩)">
+                <div class="quiz-question-title">4. En una onda armónica, ¿cómo se compara la densidad de energía
+                  cinética media con la potencial elástica media?</div>
+                <div class="quiz-options">
+                  <label class="quiz-option"><input type="radio" name="p12_q4" value="a"> a) Son exactamente iguales en
+                    promedio temporal ($\langle u_k \rangle = \langle u_p \rangle = \frac{1}{4}\rho \omega^2
+                    A^2$)</label>
+                  <label class="quiz-option"><input type="radio" name="p12_q4" value="b"> b) La cinética siempre es el
+                    doble de la potencial</label>
+                  <label class="quiz-option"><input type="radio" name="p12_q4" value="c"> c) La potencial es nula en
+                    todo punto</label>
+                  <label class="quiz-option"><input type="radio" name="p12_q4" value="d"> d) La cinética sólo existe en
+                    los antinodos</label>
+                </div>
+                <div class="quiz-feedback"></div>
+              </div>
+
+              <div class="quiz-actions">
+                <button class="quiz-validate-btn" type="button"><i class="fas fa-check-circle"></i> Validar
+                  Respuestas</button>
+              </div>
+              <div class="quiz-result" role="status" aria-live="polite"></div>
+            </form>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PÁGINA 13: MEMBRANAS 2D (CHLADNI)
+           ==================================================================== -->
+      <section class="notebook-page" id="page-13">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Ondas Bidimensionales</span>
+            <span class="page-number-tag">Página 13 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-border-all" style="color: #0284c7;"></i>
+            Vibraciones en Membranas 2D
+          </h2>
+          <p class="page-subtitle">Modos normales, cuantización bidimensional y figuras de Chladni</p>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-th"></i> Ecuación de Onda en Membrana Rectangular</h4>
+            <p class="text-paragraph">
+              Para una membrana elástica de lados $a$ y $b$ con bordes fijos, sometida a tensión superficial $T$ [N/m] y
+              densidad superficial $\sigma$ [$\text{kg/m}^2$]:
+            </p>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$\frac{\partial^2 \psi}{\partial x^2} + \frac{\partial^2
+                \psi}{\partial y^2} = \frac{1}{v^2}\frac{\partial^2 \psi}{\partial t^2}, \quad v =
+                \sqrt{\frac{T}{\sigma}}$$</div>
+              <span class="math-equation-tag">(15)</span>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-network-wired"></i> Modos Normales y Frecuencias Discretas</h4>
+            <p class="text-paragraph">
+              Aplicando condiciones de frontera de Dirichlet ($\psi = 0$ en el contorno), las constantes espaciales se
+              discretizan: $k_x = \frac{n\pi}{a}$, $k_y = \frac{m\pi}{b}$ ($n, m = 1, 2, 3, \dots$).
+            </p>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$\boxed{f_{n,m} = \frac{v}{2}\sqrt{\left(\frac{n}{a}\right)^2 +
+                \left(\frac{m}{b}\right)^2}}$$</div>
+              <span class="math-equation-tag">(16)</span>
+            </div>
+          </div>
+
+          <div class="mindmap-branches">
+            <div class="mindmap-branch-card">
+              <h5>Modo (1, 1) Fundamental</h5>
+              <p>Toda la membrana oscila en fase. Sin líneas nodales internas.</p>
+            </div>
+            <div class="mindmap-branch-card">
+              <h5>Modo (2, 1)</h5>
+              <p>Una línea nodal central en $x = a/2$. Mitades en contrafase.</p>
+            </div>
+            <div class="mindmap-branch-card">
+              <h5>Modo (2, 2)</h5>
+              <p>Cruz nodal ($x=a/2, y=b/2$). Cuatro cuadrantes alternados.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PÁGINA 14: INTERFERENCIA ESPACIAL (HIPÉRBOLAS)
+           ==================================================================== -->
+      <section class="notebook-page" id="page-14">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Unidad V: Superposición e Interferencia</span>
+            <span class="page-number-tag">Página 14 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-bullseye" style="color: #0284c7;"></i>
+            Interferencia Espacial de Fuentes Coherentes
+          </h2>
+          <p class="page-subtitle">Diferencia de marcha geométrica y generación de hipérbolas nodales en el plano</p>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-compress-arrows-alt"></i> Condiciones de Interferencia</h4>
+            <p class="text-paragraph">
+              Dos fuentes $F_1, F_2$ sincrónicas separadas una distancia $d$ emiten con longitud de onda $\lambda$. En
+              cualquier punto $P$, las distancias son $r_1$ y $r_2$:
+            </p>
+            <div class="math-equation-content">
+              $$\text{Máximos (Constructiva): } |r_1 - r_2| = n\lambda, \quad n = 0, 1, 2, \dots$$
+              $$\text{Mínimos (Destructiva): } |r_1 - r_2| = \left(n + \frac{1}{2}\right)\lambda$$
+            </div>
+          </div>
+
+          <div class="concept-card" style="border-left-color:#00f0ff;">
+            <h4><i class="fas fa-shapes"></i> Geometría Analítica Hiperbólica</h4>
+            <p class="text-paragraph">
+              El lugar geométrico de los puntos con diferencia de marcha constante $|r_1 - r_2| = \text{cte}$ define una
+              familia de <strong>hipérbolas</strong> con focos en las fuentes $F_1$ y $F_2$:
+            </p>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$\boxed{\frac{x^2}{a^2} - \frac{y^2}{b^2} = 1, \quad c = \frac{d}{2},
+                \quad a = \frac{n\lambda}{2}, \quad b = \sqrt{c^2 - a^2}}$$</div>
+              <span class="math-equation-tag">(17)</span>
+            </div>
+          </div>
+
+          <div class="exercise-solver-card">
+            <div class="exercise-header">
+              <h3><i class="fas fa-broadcast-tower" style="color:#0284c7;"></i> Ejemplo 3-21: Altavoces a 21.5 Hz</h3>
+            </div>
+            <div class="exercise-enunciado">
+              Dos altavoces separados $10\text{ m}$ emiten a $21.5\text{ Hz}$ ($v = 344\text{ m/s} \implies \lambda =
+              16\text{ m}$). Hallar la trayectoria de mínima intensidad.
+            </div>
+            <div class="step-despejes">
+              <div class="step-despejes-title"><i class="fas fa-calculator"></i> Resultado:</div>
+              <div class="math-equation-content">$$\Delta r = 8\text{ m} \implies a = 4, \quad c = 5, \quad b =
+                \sqrt{5^2 - 4^2} = 3 \implies \mathbf{\frac{x^2}{16} - \frac{y^2}{9} = 1}$$</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PÁGINA 15: ONDAS ESTACIONARIAS EN CUERDAS
+           ==================================================================== -->
+      <section class="notebook-page" id="page-15">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Ondas Estacionarias y Resonancia</span>
+            <span class="page-number-tag">Página 15 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-sliders-h" style="color: #0284c7;"></i>
+            Ondas Estacionarias en Cuerdas Tensas
+          </h2>
+          <p class="page-subtitle">Superposición en contrafase, localización de nodos y vientres, y simulador modal</p>
+
+          <div class="math-equation-row" style="margin-bottom:8px;">
+            <div class="math-equation-content">
+              $$\psi(x,t) = [2A\sin(kx)]\cos(\omega t), \quad x_N = n\frac{\lambda}{2}, \quad x_A =
+              (2n+1)\frac{\lambda}{4}, \quad \boxed{f_n = n\frac{v}{2L}}$$
+            </div>
+            <span class="math-equation-tag">(18)</span>
+          </div>
+
+          <!-- SIMULADOR INTERACTIVO DE ONDAS ESTACIONARIAS -->
+          <div class="simulator-box" style="margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span style="font-size:0.82rem; font-weight:700; color:#00f0ff;"><i class="fas fa-wave-square"></i>
+                Resonador Modal Interactivo</span>
+              <div style="display:flex; gap:10px;">
+                <select id="selectHarmonic" class="preset-select" style="padding:2px 8px; font-size:0.78rem;">
+                  <option value="1">Modo Fundamental n = 1</option>
+                  <option value="2" selected>2º Armónico n = 2</option>
+                  <option value="3">3º Armónico n = 3</option>
+                  <option value="4">4º Armónico n = 4</option>
+                  <option value="5">5º Armónico n = 5</option>
+                </select>
+                <select id="selectBoundary" class="preset-select" style="padding:2px 8px; font-size:0.78rem;">
+                  <option value="fixed" selected>Cuerda Extremos Fijos</option>
+                  <option value="open">Tubo Abierto</option>
+                  <option value="closed">Tubo Cerrado</option>
+                </select>
+              </div>
+            </div>
+            <canvas id="canvasStandingWave" class="sim-viewport-canvas" style="height:140px;"></canvas>
+          </div>
+
+          <div class="concept-card" style="border-left-color:#10b981;">
+            <h4><i class="fas fa-guitar"></i> Instrumentos de Cuerda y Aparato de Melde</h4>
+            <p class="text-paragraph" style="font-size:0.85rem;">
+              En una cuerda fija, la distancia entre nodos sucesivos es exactamente $\lambda/2$. Al variar la longitud
+              efectiva (acortando con los dedos en una guitarra o violín), la longitud de onda disminuye y la frecuencia
+              fundamental aumenta proporcionalmente ($f \propto 1/L$).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PÁGINA 16: TUBOS SONOROS (ABIERTOS/CERRADOS)
+           ==================================================================== -->
+      <section class="notebook-page" id="page-16">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Acústica de Columnas de Gas</span>
+            <span class="page-number-tag">Página 16 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-drum" style="color: #0284c7;"></i>
+            Tubos Sonoros Abiertos y Cerrados
+          </h2>
+          <p class="page-subtitle">Condiciones de contorno para ondas de desplazamiento y presión acústica</p>
+
+          <div class="mindmap-branches" style="margin-bottom:8px;">
+            <div class="mindmap-branch-card" style="border-left-color:#0284c7;">
+              <h5>1. Tubos Abiertos</h5>
+              <p>Ambos extremos libres $\implies$ Antinodos de desplazamiento.</p>
+              <div class="math-equation-content">$$\boxed{f_n = n\frac{v}{2L}}, \quad n=1,2,3,\dots$$</div>
+              <p>Contiene <strong>todos los armónicos</strong> (pares e impares).</p>
+            </div>
+            <div class="mindmap-branch-card" style="border-left-color:#f59e0b;">
+              <h5>2. Tubos Cerrados</h5>
+              <p>Un extremo cerrado $\implies$ Nodo de desplazamiento y antinodo de presión.</p>
+              <div class="math-equation-content">$$\boxed{f_n = (2n-1)\frac{v}{4L}}$$</div>
+              <p>Solo contiene <strong>armónicos impares</strong> (1º, 3º, 5º...).</p>
+            </div>
+          </div>
+
+          <div class="exercise-solver-card">
+            <div class="exercise-header">
+              <h3><i class="fas fa-vial" style="color:#0284c7;"></i> Ejemplo 3-15: Tubo Cerrado de Órgano</h3>
+            </div>
+            <div class="exercise-enunciado">
+              Dos frecuencias naturales adyacentes de un tubo cerrado son $550\text{ Hz}$ y $650\text{ Hz}$ ($v =
+              340\text{ m/s}$). Hallar la frecuencia fundamental $f_1$ y la longitud $L$ del tubo.
+            </div>
+            <div class="step-despejes">
+              <div class="step-despejes-title"><i class="fas fa-calculator"></i> Despejes:</div>
+              <p class="despeje-item">• En tubos cerrados, la separación entre armónicos consecutivos es $\Delta f =
+                2f_1$:</p>
+              <div class="math-equation-content">$$2f_1 = 650 - 550 = 100\text{ Hz} \implies \mathbf{f_1 = 50\text{
+                Hz}}$$</div>
+              <p class="despeje-item">• Longitud del tubo cerrado:</p>
+              <div class="math-equation-content">$$L = \frac{v}{4f_1} = \frac{340\text{ m/s}}{4(50\text{ s}^{-1})} =
+                \mathbf{1.70\text{ m}}$$</div>
+            </div>
+          </div>
+
+          <!-- QUIZ 3: ONDAS ESTACIONARIAS Y TUBOS SONOROS -->
+          <div class="quiz-panel" data-quiz-page="page-16">
+            <div class="quiz-panel-header">
+              <h3 class="quiz-panel-title"><i class="fas fa-brain" style="color:#0284c7;"></i> Quiz 3: Ondas
+                Estacionarias y Resonancia Acústica</h3>
+              <button class="quiz-reset-btn" type="button"><i class="fas fa-rotate-left"></i> Reiniciar</button>
+            </div>
+            <form class="quiz-form">
+              <div class="quiz-question" data-answer="b" data-answer-text="b) Solo armónicos impares fn = (2n-1)v/(4L)">
+                <div class="quiz-question-title">1. ¿Qué armónicos pueden excitarse en un tubo acústico cerrado por un
+                  extremo y abierto por el otro?</div>
+                <div class="quiz-options">
+                  <label class="quiz-option"><input type="radio" name="p16_q1" value="a"> a) Todos los múltiplos enteros
+                    $n = 1, 2, 3, 4\dots$</label>
+                  <label class="quiz-option"><input type="radio" name="p16_q1" value="b"> b) Únicamente los armónicos
+                    impares ($f_1, 3f_1, 5f_1\dots$)</label>
+                  <label class="quiz-option"><input type="radio" name="p16_q1" value="c"> c) Únicamente armónicos pares
+                    ($2f_1, 4f_1\dots$)</label>
+                  <label class="quiz-option"><input type="radio" name="p16_q1" value="d"> d) Solo la frecuencia
+                    fundamental</label>
+                </div>
+                <div class="quiz-feedback"></div>
+              </div>
+
+              <div class="quiz-question" data-answer="a"
+                data-answer-text="a) Nodo de desplazamiento (ψ = 0) y antinodo de presión (Δp máximo)">
+                <div class="quiz-question-title">2. En el extremo cerrado rígido de un tubo sonoro, ¿qué condiciones de
+                  contorno se cumplen?</div>
+                <div class="quiz-options">
+                  <label class="quiz-option"><input type="radio" name="p16_q2" value="a"> a) Nodo de desplazamiento
+                    ($\psi = 0$) y antinodo de presión ($\Delta p = \text{máx}$)</label>
+                  <label class="quiz-option"><input type="radio" name="p16_q2" value="b"> b) Antinodo de desplazamiento
+                    y nodo de presión</label>
+                  <label class="quiz-option"><input type="radio" name="p16_q2" value="c"> c) Nodos simultáneos para
+                    ambas variables</label>
+                  <label class="quiz-option"><input type="radio" name="p16_q2" value="d"> d) Antinodos simultáneos para
+                    ambas variables</label>
+                </div>
+                <div class="quiz-feedback"></div>
+              </div>
+
+              <div class="quiz-question" data-answer="b" data-answer-text="b) Aumenta según fo = f(v / (v - vs))">
+                <div class="quiz-question-title">3. Cuando una fuente emisora se acerca a un receptor en reposo con
+                  rapidez $v_s$, la frecuencia observada:</div>
+                <div class="quiz-options">
+                  <label class="quiz-option"><input type="radio" name="p16_q3" value="a"> a) Disminuye por la separación
+                    espacial de frentes de onda</label>
+                  <label class="quiz-option"><input type="radio" name="p16_q3" value="b"> b) Aumenta porque los frentes
+                    de onda se comprimen ($f_o = f \frac{v}{v - v_s}$)</label>
+                  <label class="quiz-option"><input type="radio" name="p16_q3" value="c"> c) Es idéntica porque la
+                    rapidez del sonido en el aire no cambia</label>
+                  <label class="quiz-option"><input type="radio" name="p16_q3" value="d"> d) Cae a cero al superar
+                    $v_s$</label>
+                </div>
+                <div class="quiz-feedback"></div>
+              </div>
+
+              <div class="quiz-question" data-answer="b" data-answer-text="b) 4 Hz (f_bat = |f1 - f2|)">
+                <div class="quiz-question-title">4. Dos diapasones de frecuencias $440\text{ Hz}$ y $444\text{ Hz}$
+                  vibran al mismo tiempo. ¿Cuál es la frecuencia del batimiento percibido?</div>
+                <div class="quiz-options">
+                  <label class="quiz-option"><input type="radio" name="p16_q4" value="a"> a) $442\text{ Hz}$</label>
+                  <label class="quiz-option"><input type="radio" name="p16_q4" value="b"> b) $4\text{ Hz}$
+                    ($f_{\text{bat}} = |f_1 - f_2| = |444 - 440|$)</label>
+                  <label class="quiz-option"><input type="radio" name="p16_q4" value="c"> c) $884\text{ Hz}$</label>
+                  <label class="quiz-option"><input type="radio" name="p16_q4" value="d"> d) $8\text{ Hz}$</label>
+                </div>
+                <div class="quiz-feedback"></div>
+              </div>
+
+              <div class="quiz-actions">
+                <button class="quiz-validate-btn" type="button"><i class="fas fa-check-circle"></i> Validar
+                  Respuestas</button>
+              </div>
+              <div class="quiz-result" role="status" aria-live="polite"></div>
+            </form>
+          </div>
+
+        </div>
+      </section>
+      <!-- ====================================================================
+           PÁGINA 17: EFECTO DOPPLER Y CONO DE MACH
+           ==================================================================== -->
+      <section class="notebook-page" id="page-17">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Unidad VI: Efecto Doppler y Régimen Supersónico</span>
+            <span class="page-number-tag">Página 17 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-fighter-jet" style="color: #0284c7;"></i>
+            Efecto Doppler & Régimen Supersónico
+          </h2>
+          <p class="page-subtitle">Movimiento relativo de fuente y observador, Cono de Mach y ondas de choque</p>
+
+          <!-- TARJETA DESTACADA: ACCESO AL LABORATORIO VIRTUAL DE DOPPLER -->
+          <div class="lab-link-card"
+            style="display:flex; align-items:center; justify-content:space-between; background:linear-gradient(135deg, rgba(2,132,199,0.08), rgba(6,182,212,0.12)); border:1.5px solid rgba(2,132,199,0.3); border-radius:8px; padding:6px 12px; margin-bottom:6px; box-shadow:0 2px 6px rgba(2,132,199,0.06);">
+            <div style="display:flex; align-items:center; gap:9px;">
+              <div
+                style="width:30px; height:30px; border-radius:6px; background:linear-gradient(135deg, #0284c7, #06b6d4); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; box-shadow:0 2px 6px rgba(2,132,199,0.25);">
+                <i class="fas fa-satellite-dish"></i>
+              </div>
+              <div>
+                <strong style="font-size:0.86rem; color:var(--text-dark); display:block; font-weight:700;">Laboratorio
+                  Virtual: Efecto Doppler & Mach</strong>
+                <span style="font-size:0.75rem; color:var(--text-muted);">Simulación 2D, observador arrastrable, curvas
+                  $f_o(t)$ y audio en tiempo real</span>
+              </div>
+            </div>
+            <a href="laboratorio-doppler.html" class="top-btn"
+              style="background:#0284c7; color:#fff; font-weight:700; padding:5px 12px; text-decoration:none; border-radius:6px; display:inline-flex; align-items:center; gap:5px; font-size:0.78rem; white-space:nowrap; box-shadow:0 2px 5px rgba(2,132,199,0.25);">
+              <span>Abrir Laboratorio</span> <i class="fas fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+
+          <div class="math-equation-row" style="margin-bottom:6px;">
+            <div class="math-equation-content">
+              $$\boxed{f_o = f_s\left(\frac{c \pm v_o}{c \mp v_f}\right)}, \quad \text{Supersónico } (M > 1): \quad
+              \boxed{\sin\mu = \frac{c}{v_f} = \frac{1}{M}}$$
+            </div>
+            <span class="math-equation-tag">(19)</span>
+          </div>
+
+          <!-- SIMULADOR ANIMADO DOPPLER & CONO DE MACH EN EL CUADERNO -->
+          <div class="simulator-box" style="margin-bottom:6px; padding:8px 12px;">
+            <canvas id="canvasDopplerMach" class="sim-viewport-canvas" style="height:110px;"></canvas>
+            <div class="sim-controls-grid" style="margin-top:6px; gap:8px;">
+              <div class="sim-control-item" style="grid-column: span 2;">
+                <label style="font-size:0.75rem;">Velocidad de la fuente $v_f$ [m/s] (c = 120 m/s)</label>
+                <input type="range" id="sliderDopplerVf" min="0" max="360" step="5" value="60">
+              </div>
+              <div class="sim-control-item" style="grid-column: span 1;">
+                <label style="font-size:0.75rem;">Régimen y Frecuencia:</label>
+                <span id="readDopplerMach"
+                  style="font-family:var(--font-mono); font-size:0.85rem; color:#f97316; font-weight:700;">Mach 0.50 (60
+                  m/s)</span>
+              </div>
+              <div class="sim-control-item" style="grid-column: span 1; display:flex; align-items:flex-end;">
+                <button type="button" id="btnAudioDopplerNotebook" class="nav-btn audio-btn"
+                  style="width:100%; height:28px; font-size:0.78rem; justify-content:center; border-radius:5px; background:rgba(2,132,199,0.08); border-color:rgba(2,132,199,0.3); color:#0284c7; cursor:pointer;">
+                  <i class="fas fa-volume-xmark"></i> <span>Tono Doppler</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- EJEMPLO RESUELTO PASO A PASO 3-18 -->
+          <div class="exercise-solver-card" style="margin:6px 0; padding:12px 14px;">
+            <div class="exercise-header" style="margin-bottom:4px;">
+              <h3 style="font-size:0.9rem;"><i class="fas fa-ambulance" style="color:#0284c7;"></i> Ejemplo 3-18: Efecto
+                Doppler con Ambulancia y Observador Móvil (Pág. 112)</h3>
+            </div>
+            <div class="exercise-enunciado" style="font-size:0.8rem; margin-bottom:5px; line-height:1.4;">
+              Una ambulancia emite $f_s = 600\text{ Hz}$ viajando a $v_f = 30\text{ m/s}$ ($108\text{ km/h}$). Una
+              patrulla se desplaza a $v_o = 15\text{ m/s}$ ($54\text{ km/h}$) en sentido opuesto acercándose
+              directamente ($c = 340\text{ m/s}$). Calcular la frecuencia percibida al acercarse y al alejarse.
+            </div>
+            <div class="step-despejes" style="font-size:0.8rem;">
+              <div class="step-despejes-title"><i class="fas fa-calculator"></i> Despejes y Cálculo:</div>
+              <p class="despeje-item">• <strong>En acercamiento (signos $+ / -$):</strong></p>
+              <div class="math-equation-content">$$f_{o,\text{acercamiento}} = 600\left(\frac{340 + 15}{340 - 30}\right)
+                = 600\left(\frac{355}{310}\right) \approx \mathbf{687.1\text{ Hz}} \quad (\Delta f = +87.1\text{ Hz})$$
+              </div>
+              <p class="despeje-item">• <strong>En alejamiento (signos $- / +$):</strong></p>
+              <div class="math-equation-content">$$f_{o,\text{alejamiento}} = 600\left(\frac{340 - 15}{340 + 30}\right)
+                = 600\left(\frac{325}{370}\right) \approx \mathbf{527.0\text{ Hz}} \quad (\Delta f = -73.0\text{ Hz})$$
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-card" style="border-left-color:#f97316; margin:0; padding:8px 12px;">
+            <h4 style="margin:0 0 2px; font-size:0.86rem;"><i class="fas fa-radiation"></i> Onda de Choque y Estampido
+              Sónico</h4>
+            <p class="text-paragraph" style="font-size:0.78rem; margin:0; line-height:1.35;">
+              Cuando $v_f > c$, los frentes esféricos se apilan formando la envolvente cónica de Mach ($\sin\mu = 1/M$).
+              En su superficie existe una discontinuidad abrupta percibida como estampido sónico.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PÁGINA 18: BATIMIENTOS (PULSACIONES)
+           ==================================================================== -->
+      <section class="notebook-page" id="page-18">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Interferencia en el Dominio Temporal</span>
+            <span class="page-number-tag">Página 18 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-wave-square" style="color: #0284c7;"></i>
+            Batimientos (Pulsaciones Acústicas)
+          </h2>
+          <p class="page-subtitle">Superposición de frecuencias cercanas, modulación de amplitud y audio en vivo</p>
+
+          <div class="concept-card" style="margin-bottom:6px; padding:8px 12px;">
+            <h4 style="margin:0 0 2px; font-size:0.86rem;"><i class="fas fa-calculator"></i> Deducción Trigonométrica
+            </h4>
+            <div class="math-equation-content" style="margin:3px 0;">
+              $$\psi(t) = A\cos(\omega_1 t) + A\cos(\omega_2 t) = \left[2A\cos\left(\frac{\omega_1 -
+              \omega_2}{2}t\right)\right]\cos\left(\frac{\omega_1 + \omega_2}{2}t\right), \quad \boxed{f_{\text{bat}} =
+              |f_1 - f_2|}$$
+            </div>
+          </div>
+
+          <!-- GENERADOR DE AUDIO DE BATIMIENTO -->
+          <div class="simulator-box" style="margin-bottom:6px; padding:8px 12px;">
+            <canvas id="canvasBeatsWave" class="sim-viewport-canvas" style="height:110px;"></canvas>
+            <div class="sim-controls-grid" style="margin-top:6px; gap:8px;">
+              <div class="sim-control-item">
+                <label style="font-size:0.75rem;">Frecuencia $f_1$ [Hz]</label>
+                <input type="range" id="sliderBeatF1" min="400" max="460" step="1" value="440">
+              </div>
+              <div class="sim-control-item">
+                <label style="font-size:0.75rem;">Frecuencia $f_2$ [Hz]</label>
+                <input type="range" id="sliderBeatF2" min="400" max="460" step="1" value="443">
+              </div>
+              <div class="sim-control-item">
+                <label style="font-size:0.75rem;">Frecuencia de batimiento</label>
+                <span id="readBeatFreq"
+                  style="font-family:var(--font-mono); font-size:0.95rem; color:#f97316; font-weight:700;">3.0 Hz</span>
+              </div>
+              <div class="sim-control-item">
+                <label style="font-size:0.75rem;">Audio Web</label>
+                <button class="sim-btn" id="btnBeatAudio" style="padding:4px 8px; font-size:0.78rem;">
+                  <i class="fas fa-volume-up"></i> Escuchar batimiento
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- EJEMPLO RESUELTO PASO A PASO 3-24 -->
+          <div class="exercise-solver-card" style="margin:6px 0; padding:12px 14px;">
+            <div class="exercise-header" style="margin-bottom:4px;">
+              <h3 style="font-size:0.9rem;"><i class="fas fa-guitar" style="color:#0284c7;"></i> Ejemplo 3-24:
+                Batimientos entre Cuerdas de Piano por Variación de Tensión (Pág. 136)</h3>
+            </div>
+            <div class="exercise-enunciado" style="font-size:0.8rem; margin-bottom:5px; line-height:1.4;">
+              Dos cuerdas de piano idénticas de $L = 0.75\text{ m}$ vibran en su modo fundamental afinadas inicialmente
+              a $f_1 = 440\text{ Hz}$. La tensión de una de ellas aumenta en un $1.0\%$ ($\Delta T / T = 0.01$). ¿Cuál
+              es la frecuencia de batimiento generada al tocarlas simultáneamente?
+            </div>
+            <div class="step-despejes" style="font-size:0.8rem;">
+              <div class="step-despejes-title"><i class="fas fa-calculator"></i> Despejes y Cálculo:</div>
+              <p class="despeje-item">• Como la frecuencia es proporcional a la raíz de la tensión ($f \propto
+                \sqrt{T}$):</p>
+              <div class="math-equation-content">$$f_2 = f_1 \sqrt{1 + \frac{\Delta T}{T}} = 440\sqrt{1.01} \approx 440
+                \times 1.00499 = \mathbf{442.2\text{ Hz}}$$</div>
+              <p class="despeje-item">• Frecuencia de batimiento o pulsación percibida:</p>
+              <div class="math-equation-content">$$\boxed{f_{\text{bat}} = |f_2 - f_1| = |442.2 - 440| =
+                \mathbf{2.2\text{ Hz}}} \quad (\approx 2.2\text{ pulsaciones/s})$$</div>
+            </div>
+          </div>
+
+          <div class="concept-card" style="border-left-color:#10b981; margin:0; padding:8px 12px;">
+            <h4 style="margin:0 0 2px; font-size:0.86rem;"><i class="fas fa-wrench"></i> Aplicación Instrumental:
+              Afinación de Pianos</h4>
+            <p class="text-paragraph" style="font-size:0.78rem; margin:0; line-height:1.35;">
+              Los afinadores golpean un diapasón patrón a $440\text{ Hz}$ al tiempo que hacen sonar la cuerda. Ajustan
+              la clavija hasta que la frecuencia de batimiento $f_{\text{bat}}$ se reduce a cero, logrando sincronía
+              perfecta.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PÁGINA 19: REFLEXIÓN, REFRACCIÓN Y FRONTERAS
+           ==================================================================== -->
+      <section class="notebook-page" id="page-19">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Unidad VII: Fenómenos de Frontera</span>
+            <span class="page-number-tag">Página 19 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-exchange-alt" style="color: #0284c7;"></i>
+            Reflexión, Refracción & Fronteras
+          </h2>
+          <p class="page-subtitle">Leyes de Snell, empalme de cuerdas elásticas y cambios de fase de 180°</p>
+
+          <div class="concept-card">
+            <h4><i class="fas fa-project-diagram"></i> Leyes de Snell en Medios Continuos</h4>
+            <div class="math-equation-row">
+              <div class="math-equation-content">$$\theta_i = \theta_r, \qquad \boxed{\frac{\sin\theta_i}{\sin\theta_t}
+                = \frac{v_1}{v_2}}$$</div>
+              <span class="math-equation-tag">(20)</span>
+            </div>
+          </div>
+
+          <div class="concept-card" style="border-left-color:#00f0ff;">
+            <h4><i class="fas fa-link"></i> Coeficientes de Amplitud en Cuerdas Empalmadas</h4>
+            <p class="text-paragraph" style="font-size:0.85rem;">
+              En el empalme $x=0$ entre una cuerda 1 ($\mu_1$) y una cuerda 2 ($\mu_2$) bajo tensión $T$:
+            </p>
+            <div class="math-equation-content">
+              $$\boxed{R_A = \frac{A_r}{A_i} = \frac{v_2 - v_1}{v_1 + v_2} = \frac{\sqrt{\mu_1} -
+              \sqrt{\mu_2}}{\sqrt{\mu_1} + \sqrt{\mu_2}}}$$
+              $$\boxed{T_A = \frac{A_t}{A_i} = \frac{2v_2}{v_1 + v_2} = \frac{2\sqrt{\mu_1}}{\sqrt{\mu_1} +
+              \sqrt{\mu_2}}}$$
+            </div>
+          </div>
+
+          <div class="mindmap-branches">
+            <div class="mindmap-branch-card" style="border-left-color:#ef4444;">
+              <h5>Medio más denso ($\mu_2 > \mu_1$)</h5>
+              <p>$R_A < 0 \implies$ <strong>Inversión de fase de $\pi$ ($180^\circ$)</strong> en la reflexión.</p>
+            </div>
+            <div class="mindmap-branch-card" style="border-left-color:#10b981;">
+              <h5>Medio menos denso ($\mu_2 < \mu_1$)</h5>
+                  <p>$R_A > 0 \implies$ Reflexión <strong>sin cambio de fase</strong>.</p>
+            </div>
+            <div class="mindmap-branch-card" style="border-left-color:#0284c7;">
+              <h5>Conservación de Potencia</h5>
+              <p>$R_P + T_P = 1$, con $R_P = R_A^2$, $T_P = \frac{v_1}{v_2}T_A^2$.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PÁGINA 20: SÍNTESIS DE FOURIER & QUIZZES
+           ==================================================================== -->
+      <section class="notebook-page" id="page-20">
+        <div class="page-content-wrapper">
+          <div class="page-header-banner">
+            <span class="unit-label">Unidad VIII: Análisis Espectral y Cierre</span>
+            <span class="page-number-tag">Página 20 de 20</span>
+          </div>
+
+          <h2 class="page-title">
+            <i class="fas fa-graduation-cap" style="color: #0284c7;"></i>
+            Síntesis de Fourier & Quizzes Finales
+          </h2>
+          <p class="page-subtitle">Descomposición espectral interactiva, autoevaluación formativa y créditos</p>
+
+          <!-- SINTETIZADOR DE FOURIER -->
+          <!-- SINTETIZADOR DE FOURIER MEJORADO -->
+          <div class="fourier-simulator-panel">
+            <div class="fourier-sim-header">
+              <div class="fourier-title-group">
+                <i class="fas fa-chart-area" style="color: #0284c7;"></i>
+                <strong>Cuerda Punteada Triangular: Síntesis de Fourier</strong>
+              </div>
+              <div class="fourier-badges">
+                <span class="fourier-badge-item" id="readFourierN">N = 3 armónicos</span>
+                <span class="fourier-badge-item" id="readFourierH">h = 35 mm</span>
+              </div>
+            </div>
+
+            <!-- Canvas de la onda -->
+            <canvas id="canvasFourier" class="fourier-canvas" style="width:100%; height:130px;"></canvas>
+
+            <!-- Controles interactivos duales -->
+            <div class="fourier-controls-grid">
+              <div class="fourier-control-card">
+                <div class="fourier-ctrl-label-row">
+                  <label for="sliderFourierH"><i class="fas fa-arrows-alt-v" style="color:#0284c7;"></i> Desplazamiento
+                    ($h$):</label>
+                  <span class="ctrl-val-badge" id="badgeFourierH">35 mm</span>
+                </div>
+                <input type="range" id="sliderFourierH" min="10" max="60" step="1" value="35"
+                  class="fourier-range-slider">
+                <div class="slider-ticks"><span>10 mm (Leve)</span><span>35 mm</span><span>60 mm (Máximo)</span></div>
+              </div>
+
+              <div class="fourier-control-card">
+                <div class="fourier-ctrl-label-row">
+                  <label for="sliderFourierN"><i class="fas fa-layer-group" style="color:#8b5cf6;"></i> Armónicos
+                    Impares ($N$):</label>
+                  <span class="ctrl-val-badge" id="badgeFourierN">3 términos</span>
+                </div>
+                <input type="range" id="sliderFourierN" min="1" max="11" step="1" value="3"
+                  class="fourier-range-slider">
+                <div class="slider-ticks"><span>1 (Senoidal)</span><span>3</span><span>7</span><span>11
+                    (Triangular)</span></div>
+              </div>
+            </div>
+
+            <!-- Barra de modos de visualización y coeficientes calculados -->
+            <div class="fourier-action-strip">
+              <div class="fourier-mode-selector">
+                <button type="button" class="fourier-mode-btn active" id="btnFourierStatic">
+                  <i class="fas fa-eye"></i> Perfil Inicial $t = 0$ (Ver Desplazamiento Estático)
+                </button>
+                <button type="button" class="fourier-mode-btn" id="btnFourierAnim">
+                  <i class="fas fa-play"></i> Oscilación Dinámica
+                </button>
+              </div>
+              <div class="fourier-info-pill" id="fourierCoeffsPill">
+                C₁ = 28.4 mm, C₃ = -3.2 mm, C₅ = +1.1 mm
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- QUIZ EVALUATIVO -->
+        <!-- QUIZ 4: MODOS NORMALES Y SÍNTESIS DE FOURIER -->
+        <div class="quiz-panel" data-quiz-page="page-20">
+          <div class="quiz-panel-header">
+            <h3 class="quiz-panel-title"><i class="fas fa-brain" style="color:#0284c7;"></i> Quiz 4: Modos Normales y
+              Síntesis de Fourier</h3>
+            <button class="quiz-reset-btn" type="button"><i class="fas fa-rotate-left"></i> Reiniciar</button>
+          </div>
+          <form class="quiz-form">
+            <div class="quiz-question" data-answer="b"
+              data-answer-text="b) En los extremos x = 0, x = L y en el centro x = L/2">
+              <div class="quiz-question-title">1. En una cuerda fija de longitud $L$, ¿dónde se sitúan los nodos del
+                segundo armónico ($n = 2$)?</div>
+              <div class="quiz-options">
+                <label class="quiz-option"><input type="radio" name="p20_q1" value="a"> a) Únicamente en los extremos $x
+                  = 0$ y $x = L$</label>
+                <label class="quiz-option"><input type="radio" name="p20_q1" value="b"> b) En los extremos $x = 0, x =
+                  L$ y en el punto medio exacto $x = L/2$</label>
+                <label class="quiz-option"><input type="radio" name="p20_q1" value="c"> c) En $x = L/4$ y $x =
+                  3L/4$</label>
+                <label class="quiz-option"><input type="radio" name="p20_q1" value="d"> d) En el segundo armónico no
+                  existen nodos internos</label>
+              </div>
+              <div class="quiz-feedback"></div>
+            </div>
+
+            <div class="quiz-question" data-answer="b"
+              data-answer-text="b) Por simetría par respecto al centro x = L/2, donde los modos pares tienen un nodo">
+              <div class="quiz-question-title">2. Para una cuerda punteada triangularmente en su centro ($x = L/2$),
+                ¿por qué se anulan todos los armónicos pares?</div>
+              <div class="quiz-options">
+                <label class="quiz-option"><input type="radio" name="p20_q2" value="a"> a) Por la conservación de la
+                  energía mecánica total</label>
+                <label class="quiz-option"><input type="radio" name="p20_q2" value="b"> b) Por simetría: la deformación
+                  es simétrica respecto al centro, donde los modos pares tienen un nodo obligado ($C_n = 0$)</label>
+                <label class="quiz-option"><input type="radio" name="p20_q2" value="c"> c) Porque la velocidad de onda
+                  se cancela para frecuencias pares</label>
+                <label class="quiz-option"><input type="radio" name="p20_q2" value="d"> d) Por absorción acústica en los
+                  extremos</label>
+              </div>
+              <div class="quiz-feedback"></div>
+            </div>
+
+            <div class="quiz-question" data-answer="b" data-answer-text="b) Cuadráticamente como 1/n² (Cn ∝ h/n²)">
+              <div class="quiz-question-title">3. ¿A qué tasa decaen los coeficientes de Fourier $C_n$ de la cuerda
+                triangular pulsada?</div>
+              <div class="quiz-options">
+                <label class="quiz-option"><input type="radio" name="p20_q3" value="a"> a) Linealmente como
+                  $1/n$</label>
+                <label class="quiz-option"><input type="radio" name="p20_q3" value="b"> b) Cuadráticamente como $1/n^2$
+                  ($C_n \propto \frac{h}{n^2}$), lo que otorga una convergencia rápida y sonido cálido</label>
+                <label class="quiz-option"><input type="radio" name="p20_q3" value="c"> c) Exponencialmente como
+                  $e^{-n}$</label>
+                <label class="quiz-option"><input type="radio" name="p20_q3" value="d"> d) Son constantes e
+                  independientes de $n$</label>
+              </div>
+              <div class="quiz-feedback"></div>
+            </div>
+
+            <div class="quiz-question" data-answer="b"
+              data-answer-text="b) Una superposición infinita de modos normales armónicos senoidales ortogonales">
+              <div class="quiz-question-title">4. El Teorema de Fourier demuestra que cualquier forma de onda en una
+                cuerda se describe rigurosamente como:</div>
+              <div class="quiz-options">
+                <label class="quiz-option"><input type="radio" name="p20_q4" value="a"> a) Un único modo fundamental con
+                  amplitud variable en el tiempo</label>
+                <label class="quiz-option"><input type="radio" name="p20_q4" value="b"> b) Una superposición lineal de
+                  modos normales armónicos senoidales ortogonales</label>
+                <label class="quiz-option"><input type="radio" name="p20_q4" value="c"> c) Un tren continuo de ondas no
+                  dispersivas sin armónicos superiores</label>
+                <label class="quiz-option"><input type="radio" name="p20_q4" value="d"> d) Una onda elipsoidal en el
+                  espacio de fase</label>
+              </div>
+              <div class="quiz-feedback"></div>
+            </div>
+
+            <div class="quiz-actions">
+              <button class="quiz-validate-btn" type="button"><i class="fas fa-check-circle"></i> Validar
+                Respuestas</button>
+            </div>
+            <div class="quiz-result" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+    </div>
+    </section>
+    </div>
+  </main>
+
+  <!-- Panel de navegación inferior fijo & Pie de página requerido -->
+  <footer class="bottom-control-bar">
+    <div class="nav-buttons-cluster">
+      <button class="nav-btn" id="btnHome" title="Ir a la Portada">
+        <i class="fas fa-step-backward"></i> Inicio
+      </button>
+      <button class="nav-btn" id="btnPrev" title="Página Anterior">
+        <i class="fas fa-chevron-left"></i> Anterior
+      </button>
+
+      <!-- Selector de Página / Pliego -->
+      <select class="page-indicator-select" id="pageSelector" aria-label="Seleccionar Página del Cuaderno">
+        <option value="0">Portada Oficial (Cerrado)</option>
+      </select>
+
+      <button class="nav-btn primary" id="btnNext" title="Página Siguiente">
+        Abrir <i class="fas fa-book-open"></i>
+      </button>
+      <button class="nav-btn" id="btnEnd" title="Ir al Final">
+        Fin <i class="fas fa-step-forward"></i>
+      </button>
+    </div>
+
+    <!-- Pie de página obligatorio estricto -->
+    <div class="official-footer-credit">
+      Cuaderno creado por: <strong>Camila Mora Pineda y Juan Sebastián Amador Martínez</strong>
+    </div>
+  </footer>
+
+  <!-- Librerías Matemáticas: KaTeX & Nerdamer -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.js"></script>
+
+  <!-- Scripts del Proyecto -->
+  <script src="js/wave-simulators.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
