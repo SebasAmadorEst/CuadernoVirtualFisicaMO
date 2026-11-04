@@ -87,10 +87,7 @@
         <div class="cover-image-container">
           <img src="imagenes/portada.png" alt="Portada Oficial Cuaderno Física 3 - Movimiento Ondulatorio">
           <div class="cover-interactive-overlay">
-            <button class="btn-open-notebook" id="btnOpenNotebook" type="button">
-              <span>Abrir Cuaderno</span>
-              <i class="fas fa-book-open"></i>
-            </button>
+
           </div>
         </div>
       </section>
@@ -1037,20 +1034,24 @@
             <div class="music-studio-header">
               <div class="studio-title-group">
                 <span class="studio-badge"><i class="fas fa-compact-disc"></i> Laboratorio Acústico Web Audio</span>
-                <h3 class="studio-title"><i class="fas fa-music" style="color:#00f0ff;"></i> Timbre & Síntesis Multinstrumento</h3>
+                <h3 class="studio-title"><i class="fas fa-music" style="color:#00f0ff;"></i> Timbre & Síntesis
+                  Multinstrumento</h3>
               </div>
-              
+
               <!-- Selector de Instrumento: Piano, Guitarra, Flauta -->
               <div class="instrument-selector-pills" role="tablist" aria-label="Seleccionar Instrumento">
-                <button class="inst-pill active" data-instrument="piano" id="pillInstPiano" type="button" role="tab" aria-selected="true" title="Piano: Cuerdas percutidas con martillo">
+                <button class="inst-pill active" data-instrument="piano" id="pillInstPiano" type="button" role="tab"
+                  aria-selected="true" title="Piano: Cuerdas percutidas con martillo">
                   <i class="fas fa-keyboard"></i>
                   <span>Piano</span>
                 </button>
-                <button class="inst-pill" data-instrument="guitar" id="pillInstGuitar" type="button" role="tab" aria-selected="false" title="Guitarra: Cuerdas pulsadas con decaimiento Karplus-Strong">
+                <button class="inst-pill" data-instrument="guitar" id="pillInstGuitar" type="button" role="tab"
+                  aria-selected="false" title="Guitarra: Cuerdas pulsadas con decaimiento Karplus-Strong">
                   <i class="fas fa-guitar"></i>
                   <span>Guitarra</span>
                 </button>
-                <button class="inst-pill" data-instrument="flute" id="pillInstFlute" type="button" role="tab" aria-selected="false" title="Flauta: Columna de aire en tubo cilíndrico abierto">
+                <button class="inst-pill" data-instrument="flute" id="pillInstFlute" type="button" role="tab"
+                  aria-selected="false" title="Flauta: Columna de aire en tubo cilíndrico abierto">
                   <i class="fas fa-wind"></i>
                   <span>Flauta</span>
                 </button>
@@ -1062,14 +1063,17 @@
               <div class="melody-controls-group">
                 <div class="melody-select-wrapper">
                   <label for="selectMelody"><i class="fas fa-play-circle" style="color:#38bdf8;"></i> Melodía:</label>
-                  <select id="selectMelody" class="preset-select studio-select" aria-label="Seleccionar melodía didáctica">
+                  <select id="selectMelody" class="preset-select studio-select"
+                    aria-label="Seleccionar melodía didáctica">
                     <!-- Opciones actualizadas dinámicamente -->
                   </select>
                 </div>
-                <button id="btnPlayMelody" class="studio-btn primary" type="button" title="Reproducir melodía seleccionada">
+                <button id="btnPlayMelody" class="studio-btn primary" type="button"
+                  title="Reproducir melodía seleccionada">
                   <i class="fas fa-play"></i> <span>Tocar</span>
                 </button>
-                <button id="btnStopMelody" class="studio-btn danger" type="button" title="Detener reproducción" disabled>
+                <button id="btnStopMelody" class="studio-btn danger" type="button" title="Detener reproducción"
+                  disabled>
                   <i class="fas fa-stop"></i>
                 </button>
               </div>
@@ -1077,7 +1081,8 @@
               <div class="studio-controls-right">
                 <div class="octave-picker">
                   <label for="selectKeyboardOctave"><i class="fas fa-layer-group"></i> Octava:</label>
-                  <select id="selectKeyboardOctave" class="preset-select studio-select" aria-label="Seleccionar octava de afinación">
+                  <select id="selectKeyboardOctave" class="preset-select studio-select"
+                    aria-label="Seleccionar octava de afinación">
                     <option value="2">2ª Octava (Grave)</option>
                     <option value="3">3ª Octava (Media)</option>
                     <option value="4" selected>4ª Octava (Central A4=440)</option>
@@ -1149,7 +1154,8 @@
                 Haz clic en una tecla o presiona en tu teclado [A - L] para tocar en vivo.
               </div>
               <div class="studio-physics-insight" id="musicPhysicsInsight">
-                Timbre armónico percutivo: fundamental con sobretonos $f, 2f, 3f\dots$ y decaimiento exponencial natural.
+                Timbre armónico percutivo: fundamental con sobretonos $f, 2f, 3f\dots$ y decaimiento exponencial
+                natural.
               </div>
             </div>
           </div>
