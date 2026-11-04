@@ -87,6 +87,10 @@
         <div class="cover-image-container">
           <img src="imagenes/portada.png" alt="Portada Oficial Cuaderno Física 3 - Movimiento Ondulatorio">
           <div class="cover-interactive-overlay">
+            <button class="btn-open-notebook" id="btnOpenNotebook" type="button">
+              <span>Abrir Cuaderno</span>
+              <i class="fas fa-book-open"></i>
+            </button>
           </div>
         </div>
       </section>
@@ -1027,26 +1031,126 @@
             <div class="math-equation-content">$$\boxed{f(n, m) = 440 \cdot 2^{(m - 3) + \frac{n - 10}{12}}}$$</div>
           </div>
 
-          <!-- TECLADO MUSICAL INTERACTIVO -->
-          <div class="simulator-box" style="margin-bottom:6px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <span style="font-size:0.82rem; font-weight:700; color:#00f0ff;"><i class="fas fa-play"></i> Teclado
-                Interactivo Web Audio</span>
-              <div style="display:flex; align-items:center; gap:6px;">
-                <label style="font-size:0.75rem; color:#94a3b8;">Octava:</label>
-                <select id="selectKeyboardOctave" class="preset-select" style="padding:2px 8px; font-size:0.78rem;">
-                  <option value="2">2ª Octava</option>
-                  <option value="3" selected>3ª Octava (Central)</option>
-                  <option value="4">4ª Octava</option>
-                </select>
+          <!-- ESTACIÓN ACÚSTICA MULTINSTRUMENTO: PIANO, GUITARRA Y FLAUTA -->
+          <div class="music-studio-card">
+            <!-- Cabecera del Estudio -->
+            <div class="music-studio-header">
+              <div class="studio-title-group">
+                <span class="studio-badge"><i class="fas fa-compact-disc"></i> Laboratorio Acústico Web Audio</span>
+                <h3 class="studio-title"><i class="fas fa-music" style="color:#00f0ff;"></i> Timbre & Síntesis Multinstrumento</h3>
+              </div>
+              
+              <!-- Selector de Instrumento: Piano, Guitarra, Flauta -->
+              <div class="instrument-selector-pills" role="tablist" aria-label="Seleccionar Instrumento">
+                <button class="inst-pill active" data-instrument="piano" id="pillInstPiano" type="button" role="tab" aria-selected="true" title="Piano: Cuerdas percutidas con martillo">
+                  <i class="fas fa-keyboard"></i>
+                  <span>Piano</span>
+                </button>
+                <button class="inst-pill" data-instrument="guitar" id="pillInstGuitar" type="button" role="tab" aria-selected="false" title="Guitarra: Cuerdas pulsadas con decaimiento Karplus-Strong">
+                  <i class="fas fa-guitar"></i>
+                  <span>Guitarra</span>
+                </button>
+                <button class="inst-pill" data-instrument="flute" id="pillInstFlute" type="button" role="tab" aria-selected="false" title="Flauta: Columna de aire en tubo cilíndrico abierto">
+                  <i class="fas fa-wind"></i>
+                  <span>Flauta</span>
+                </button>
               </div>
             </div>
-            <div class="piano-keyboard-container" id="pianoKeyboardGrid">
-              <!-- Teclas generadas dinámicamente -->
+
+            <!-- Barra de Melodías y Controles -->
+            <div class="music-studio-toolbar">
+              <div class="melody-controls-group">
+                <div class="melody-select-wrapper">
+                  <label for="selectMelody"><i class="fas fa-play-circle" style="color:#38bdf8;"></i> Melodía:</label>
+                  <select id="selectMelody" class="preset-select studio-select" aria-label="Seleccionar melodía didáctica">
+                    <!-- Opciones actualizadas dinámicamente -->
+                  </select>
+                </div>
+                <button id="btnPlayMelody" class="studio-btn primary" type="button" title="Reproducir melodía seleccionada">
+                  <i class="fas fa-play"></i> <span>Tocar</span>
+                </button>
+                <button id="btnStopMelody" class="studio-btn danger" type="button" title="Detener reproducción" disabled>
+                  <i class="fas fa-stop"></i>
+                </button>
+              </div>
+
+              <div class="studio-controls-right">
+                <div class="octave-picker">
+                  <label for="selectKeyboardOctave"><i class="fas fa-layer-group"></i> Octava:</label>
+                  <select id="selectKeyboardOctave" class="preset-select studio-select" aria-label="Seleccionar octava de afinación">
+                    <option value="2">2ª Octava (Grave)</option>
+                    <option value="3">3ª Octava (Media)</option>
+                    <option value="4" selected>4ª Octava (Central A4=440)</option>
+                    <option value="5">5ª Octava (Aguda)</option>
+                  </select>
+                </div>
+                <div class="keyboard-guide-badge" title="Toca directamente con el teclado de tu computadora">
+                  <i class="fas fa-keyboard"></i> <span>PC: [A..L] y [W, E, T, Y, U, O]</span>
+                </div>
+              </div>
             </div>
-            <div id="keyboardNoteReadout"
-              style="font-family:var(--font-mono); font-size:0.8rem; color:#10b981; text-align:center;">
-              Haz clic en cualquier tecla para escuchar su tono senoidal puro generado en tiempo real.
+
+            <!-- Escenario Visual del Instrumento Activo -->
+            <div class="instrument-visual-stage" id="instrumentVisualStage">
+              <!-- Vista Piano: Mecanismo Acústico y Cuerdas -->
+              <div id="visualPianoContainer" class="instrument-view active">
+                <div class="piano-acoustic-box">
+                  <div class="piano-brand-label">
+                    <span><i class="fas fa-keyboard"></i> Piano de Cola de Concierto</span>
+                    <small style="color:#38bdf8;">Cuerdas de Acero Percutidas con Martillos de Fieltro</small>
+                  </div>
+                  <div class="piano-strings-fan">
+                    <div class="piano-string-wire wire-bass"></div>
+                    <div class="piano-string-wire wire-mid"></div>
+                    <div class="piano-string-wire wire-treble"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Vista Guitarra: Mástil de 6 Cuerdas -->
+              <div id="visualGuitarContainer" class="instrument-view">
+                <div class="guitar-fretboard-box">
+                  <div class="guitar-headstock">
+                    <span><i class="fas fa-guitar"></i> Mástil de Guitarra (6 Cuerdas Acústicas)</span>
+                    <small style="color:#fde047;">Haz clic en las cuerdas o usa las teclas [A - L]</small>
+                  </div>
+                  <div class="guitar-strings-container" id="guitarStringsGrid">
+                    <!-- Filas de cuerdas generadas dinámicamente -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Vista Flauta: Tubo Resonante y Bisel -->
+              <div id="visualFluteContainer" class="instrument-view">
+                <div class="flute-body-box">
+                  <div class="flute-embouchure" id="fluteEmbouchure">
+                    <span class="flute-mouthpiece" id="fluteMouthpiece"></span>
+                    <small>Bisel</small>
+                  </div>
+                  <div class="flute-pipe-container" id="fluteHolesGrid">
+                    <!-- Orificios tonales y columna de resonancia generados dinámicamente -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Teclado Musical Cromático Universal (Con soporte de mouse y teclado físico PC) -->
+            <div class="piano-keyboard-container" id="pianoKeyboardGrid">
+              <!-- Teclas generadas dinámicamente con badges de teclado de PC -->
+            </div>
+
+            <!-- Pantalla Digital OLED con Información en Vivo -->
+            <div class="studio-display-panel">
+              <div class="studio-status-indicator">
+                <span class="live-pulse-dot" id="musicLiveDot"></span>
+                <span id="currentInstrumentBadge" class="inst-tag">PIANO DE COLA · CUERDAS PERCUTIDAS</span>
+              </div>
+              <div class="studio-note-readout" id="keyboardNoteReadout">
+                Haz clic en una tecla o presiona en tu teclado [A - L] para tocar en vivo.
+              </div>
+              <div class="studio-physics-insight" id="musicPhysicsInsight">
+                Timbre armónico percutivo: fundamental con sobretonos $f, 2f, 3f\dots$ y decaimiento exponencial natural.
+              </div>
             </div>
           </div>
         </div>

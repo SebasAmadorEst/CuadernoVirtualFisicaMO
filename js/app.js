@@ -265,6 +265,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function navigateTo(target) {
+    if (musicalKeyboardSim && typeof musicalKeyboardSim.stopMelody === 'function') {
+      const targetPage = typeof target === 'number' ? target : 0;
+      if (targetPage !== 11 && targetPage !== 12 && (Math.ceil(targetPage / 2) !== 6)) {
+        musicalKeyboardSim.stopMelody();
+      }
+    }
     if (isTwoPageMode()) {
       let targetSpread = 0;
       if (typeof target === 'number') {
@@ -278,7 +284,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 3. Botones y Eventos de Paginación
   if (btnOpenNotebook) {
-    btnOpenNotebook.addEventListener('click', () => navigateTo(1));
+    btnOpenNotebook.addEventListener('click', (e) => {
+      e.stopPropagation();
+      navigateTo(1);
+    });
+  }
+
+  if (pageCover) {
+    pageCover.addEventListener('click', (e) => {
+      if (currentPage === 0 || currentSpread === 0) {
+        navigateTo(1);
+      }
+    });
   }
 
   if (btnPrev) {
